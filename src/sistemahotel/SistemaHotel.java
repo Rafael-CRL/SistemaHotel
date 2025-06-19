@@ -1,20 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package sistemahotel;
 
-/**
- *
- * @author rafael
- */
-public class SistemaHotel {
+import java.sql.Connection;
+import sistemahotel.dao.ConnectionFactory; // Importe a classe
 
-    /**
-     * @param args the command line arguments
-     */
+public class SistemaHotel {
     public static void main(String[] args) {
-        // TODO code application logic here
+        Connection testeConn = ConnectionFactory.getConexao();
+        
+        if (testeConn != null) {
+            System.out.println("Conexão com o banco de dados do Railway bem-sucedida!");
+            // Aqui você pode fechar a conexão se desejar, mas para o Singleton não é sempre necessário
+        } else {
+            System.out.println("Falha ao conectar com o banco de dados do Railway.");
+        }
     }
-    
 }
