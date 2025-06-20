@@ -31,8 +31,8 @@
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="txtCpf" pref="176" max="32767" attributes="0"/>
-                  <Component id="txtSenha" max="32767" attributes="0"/>
+                  <Component id="txtCpf" max="32767" attributes="0"/>
+                  <Component id="txtSenha" pref="176" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="132" max="32767" attributes="0"/>
           </Group>
@@ -75,14 +75,8 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JPasswordField" name="txtSenha">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jPasswordField1"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtCpf">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="adicione seu cpf"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCpfActionPerformed"/>
       </Events>
