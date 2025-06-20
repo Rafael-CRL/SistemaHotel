@@ -2,6 +2,8 @@ package sistemahotel;
 
 import java.sql.Connection;
 import sistemahotel.dao.ConnectionFactory; // Importe a classe
+import sistemahotel.view.LoginView;
+import sistemahotel.view.LoginViewGUI;
 
 public class SistemaHotel {
     public static void main(String[] args) {
@@ -13,5 +15,7 @@ public class SistemaHotel {
         } else {
             System.out.println("Falha ao conectar com o banco de dados do Railway.");
         }
+        LoginViewGUI loginView = new LoginViewGUI();
+        loginView.setVisible(true);
     }
 }
