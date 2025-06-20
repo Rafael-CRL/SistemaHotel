@@ -42,9 +42,12 @@ public class LoginViewGUI extends javax.swing.JFrame {
 
         jLabel2.setText("SENHA");
 
-        txtSenha.setText("jPasswordField1");
+        txtSenha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSenhaActionPerformed(evt);
+            }
+        });
 
-        txtCpf.setText("adicione seu cpf");
         txtCpf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCpfActionPerformed(evt);
@@ -126,6 +129,10 @@ public class LoginViewGUI extends javax.swing.JFrame {
         javax.swing.JOptionPane.showMessageDialog(this, "CPF ou Senha inválidos.", "Erro de Login", javax.swing.JOptionPane.ERROR_MESSAGE);
     }
     }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSenhaActionPerformed
 
     /**
      * @param args the command line arguments
