@@ -31,7 +31,7 @@ public class MenuView {
                     System.out.println("-> Chamando módulo de Reservas (Daniel)...");
                     break;
                 case 3:
-                    System.out.println("-> Chamando módulo Financeiro (Ray)...");
+                    System.out.println("Abrindo FinanceiroView...");
                     break;
                 case 0:
                     System.out.println("Saindo do sistema...");

@@ -119,9 +119,9 @@ public class MenuViewGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGestaoActionPerformed
 
     private void btnFinanceiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinanceiroActionPerformed
-        // TODO add your handling code here:
-        System.out.println("Chamando Financeiro(Ray)");
-        System.out.println("A ser implementado");
+            FinanceiroView financeiroView = new FinanceiroView(this);
+            financeiroView.setVisible(true);
+            this.setVisible(false);
     }//GEN-LAST:event_btnFinanceiroActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
