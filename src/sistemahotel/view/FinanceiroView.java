@@ -154,7 +154,6 @@ public class FinanceiroView extends javax.swing.JFrame {
         jLabel8.setText("Valor:");
 
         BtnVoltarMenu.setText("Voltar");
-        BtnVoltarMenu.setActionCommand("Voltar");
         BtnVoltarMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnVoltarMenuActionPerformed(evt);
