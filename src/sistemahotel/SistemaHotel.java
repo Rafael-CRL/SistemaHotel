@@ -2,7 +2,6 @@ package sistemahotel;
 
 import java.sql.Connection;
 import sistemahotel.dao.ConnectionFactory; // Importe a classe
-import sistemahotel.view.LoginView;
 import sistemahotel.view.LoginViewGUI;
 
 public class SistemaHotel {
