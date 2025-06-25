@@ -28,6 +28,8 @@ public class QuartoDAO {
         String sql = "SELECT * FROM quartos WHERE status = 'Disponível'";
         PreparedStatement stmt = con.prepareStatement(sql);
         ResultSet rs = stmt.executeQuery();
+        
+        
 
         while (rs.next()) {
             Quarto q = new Quarto(
@@ -41,5 +43,35 @@ public class QuartoDAO {
         con.close();
         return quartos;
     }
+        public Quarto buscarPorId(int id) throws SQLException {
+        String sql = "SELECT * FROM quartos WHERE id = ?";
+        try (Connection con = ConnectionFactory.getConexao();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Quarto(
+                        rs.getInt("id"),
+                        rs.getString("numero"),
+                        rs.getString("tipo"),
+                        rs.getString("status")
+                    );
+                }
+            }
+        }
+        return null;
+    }
+
+    // 2) Atualiza os dados (especialmente o status) de um quarto existente
+    public void atualizar(Quarto quarto) throws SQLException {
+        String sql = "UPDATE quartos SET numero = ?, tipo = ?, status = ? WHERE id = ?";
+        try (Connection con = ConnectionFactory.getConexao();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, quarto.getNumero());
+            stmt.setString(2, quarto.getTipo());
+            stmt.setString(3, quarto.getStatus());
+            stmt.setInt   (4, quarto.getId());
+            stmt.executeUpdate();
+        }
+    }
 }
- 
