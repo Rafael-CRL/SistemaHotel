@@ -119,9 +119,9 @@ public class MenuViewGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReservasActionPerformed
 
     private void btnGestaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestaoActionPerformed
-        // TODO add your handling code here:
-        System.out.println("Chamando gestão(Klayton)");
-        System.out.println("A ser implementado");
+        GestaoView gestaoView = new GestaoView(this);
+        gestaoView.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_btnGestaoActionPerformed
 
     private void btnFinanceiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinanceiroActionPerformed

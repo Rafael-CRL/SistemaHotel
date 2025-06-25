@@ -154,6 +154,12 @@ public class FinanceiroView extends javax.swing.JFrame {
 
         jLabel7.setText("Saldo Total: R$");
 
+        TxtDataDoSaldo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TxtDataDoSaldoActionPerformed(evt);
+            }
+        });
+
         BtnBuscarSaldo.setText("Buscar Saldo");
         BtnBuscarSaldo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -267,9 +273,11 @@ public class FinanceiroView extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+
                             .addComponent(jSeparator1)
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+
                     .addGroup(layout.createSequentialGroup()
                         .addGap(256, 256, 256)
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -352,6 +360,10 @@ public class FinanceiroView extends javax.swing.JFrame {
         MenuViewGUI menu = new MenuViewGUI();
         menu.setVisible(true);
     }//GEN-LAST:event_BtnVoltarActionPerformed
+
+    private void TxtDataDoSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtDataDoSaldoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TxtDataDoSaldoActionPerformed
 
     /**
      * @param args the command line arguments
