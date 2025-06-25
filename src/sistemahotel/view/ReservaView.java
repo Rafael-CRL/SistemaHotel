@@ -8,14 +8,14 @@ package sistemahotel.view;
  *
  * @author Ray Carvalho
  */
-public class ReservaVew extends javax.swing.JFrame {
+public class ReservaView extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ReservaVew.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ReservaView.class.getName());
 
     /**
      * Creates new form ReservaVew
      */
-    public ReservaVew() {
+    public ReservaView() {
         initComponents();
     }
 
@@ -51,8 +51,6 @@ public class ReservaVew extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("SISTEMA DE RESERVAS");
 
-        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
-
         BtnSelecHospede.setText("Selecione um Hóspede");
         BtnSelecHospede.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -80,8 +78,6 @@ public class ReservaVew extends javax.swing.JFrame {
                 .addComponent(TxtSelecHospede, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        jPanel2.setBackground(new java.awt.Color(51, 51, 51));
 
         BtnSelecQuarto.setText("Selecione o Quarto");
         BtnSelecQuarto.addActionListener(new java.awt.event.ActionListener() {
@@ -116,8 +112,6 @@ public class ReservaVew extends javax.swing.JFrame {
                 .addComponent(TxtSelecQuarto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        jPanel3.setBackground(new java.awt.Color(51, 51, 51));
 
         jLabel2.setText("Data de Entrada:");
 
@@ -156,8 +150,6 @@ public class ReservaVew extends javax.swing.JFrame {
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
-        jPanel4.setBackground(new java.awt.Color(51, 51, 51));
-
         BtnCriarReserva.setText("Criar Reserva");
 
         BtnCheckIN.setText("Fazer Check-in");
@@ -165,6 +157,11 @@ public class ReservaVew extends javax.swing.JFrame {
         BtnCheckOut.setText("Fazer Check-out");
 
         BtnVoltar.setText("Voltar");
+        BtnVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnVoltarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -254,6 +251,12 @@ public class ReservaVew extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_TxtDataEntradaActionPerformed
 
+    private void BtnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnVoltarActionPerformed
+        dispose();
+        MenuViewGUI menuViewGUI = new MenuViewGUI();
+        menuViewGUI.setVisible(true);
+    }//GEN-LAST:event_BtnVoltarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -276,7 +279,7 @@ public class ReservaVew extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new ReservaVew().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new ReservaView().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
