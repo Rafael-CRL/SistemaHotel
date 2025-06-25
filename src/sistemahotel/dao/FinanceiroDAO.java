@@ -30,9 +30,9 @@ public void registrarPagamento(Financeiro transacao) {
         stmt.setString(3, transacao.getTipo());
         stmt.setDate(4, new java.sql.Date(transacao.getDataTransacao().getTime()));
         stmt.setString(5, transacao.getDescricao());
-
+        
+        JOptionPane.showMessageDialog(null, "Registro relizado com sucesso!");
         stmt.executeUpdate();
-        System.out.println("Transação registrada com sucesso");
         stmt.close();
         conn.close();
     } catch (Exception e) {
@@ -41,11 +41,10 @@ public void registrarPagamento(Financeiro transacao) {
 }
 
     
-    //metodo para buscar transção por data efetuada no banco de dados
+    //metodo para buscar transação por data efetuada no banco de dados
     public List<Financeiro> buscarTransacoesDoDia(Date date){
         List<Financeiro> transacoes = new ArrayList<>();
         String sql = "SELECT * FROM transacoes WHERE dataTransacao = ?";
-        
         
         try {
             Connection conn = ConnectionFactory.getConexao();
@@ -99,7 +98,6 @@ public void registrarPagamento(Financeiro transacao) {
             }
           }
             
-           rs.close();
            stmt.close();
            conn.close();
         } catch (Exception e) {
@@ -107,46 +105,63 @@ public void registrarPagamento(Financeiro transacao) {
       }
         return entradas - saida;
     }
-    
-    public String emitirRecibo(Financeiro transacao) {
-    StringBuilder recibo = new StringBuilder();
-    recibo.append("------ RECIBO DE PAGAMENTO ------\n");
-    recibo.append("ID da Transação: ").append(transacao.getId()).append("\n");
-    recibo.append("ID da Reserva: ").append(transacao.getId_reservas()).append("\n");
-    recibo.append("Tipo: ").append(transacao.getTipo()).append("\n");
-    recibo.append(String.format("Valor: R$ %.2f\n", transacao.getValor()));
 
-    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
-    recibo.append("Data: ").append(sdf.format(transacao.getDataTransacao())).append("\n");
+    public Financeiro buscarPorId(int id) {
+    Financeiro f = null;
+    String sql = "SELECT * FROM transacoes WHERE id = ?";
 
-    recibo.append("----------------------------------\n");
+    try (
+         Connection conn = ConnectionFactory.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-    // Mostrar no console
-    System.out.println(recibo.toString());
+        stmt.setInt(1, id);
+        ResultSet rs = stmt.executeQuery();
 
-    // Salvar em arquivo .txt
-    try {
-        // Cria pasta "recibos" se não existir
-        java.io.File pasta = new java.io.File("recibos");
-        if (!pasta.exists()) {
-            pasta.mkdir();
+        if (rs.next()) {
+            f = new Financeiro();
+            f.setId(rs.getInt("id"));
+            f.setId_reservas(rs.getInt("id_reservas"));
+            f.setValor(rs.getDouble("valor"));
+            f.setTipo(rs.getString("tipo"));
+            f.setDataTransacao(rs.getDate("dataTransacao"));
+            f.setDescricao(rs.getString("descricao")); // opcional
         }
 
-        // Define caminho do arquivo
-        String caminho = "recibos/recibo_" + transacao.getId() + ".txt";
-
-        // Escreve o arquivo
-        java.io.FileWriter writer = new java.io.FileWriter(caminho);
-        writer.write(recibo.toString());
-        writer.close();
-
-        System.out.println("Recibo salvo em: " + caminho);
-
+        rs.close();
+        stmt.close();
+        conn.close();
     } catch (Exception e) {
-        System.out.println("Erro ao salvar recibo: " + e.getMessage());
+        JOptionPane.showMessageDialog(null, "Erro ao buscar transação por ID: " + e.getMessage());
     }
 
-    return recibo.toString();
+    return f;
+}
+    public void imprimirRecibo(int idTransacao) {
+    String sql = "SELECT * FROM transacoes WHERE id = ?";
+
+    try (Connection conn = ConnectionFactory.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, idTransacao);
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            String recibo = "Recibo\n"
+                          + "ID: " + rs.getInt("id") + "\n"
+                          + "Tipo: " + rs.getString("tipo") + "\n"
+                          + "Valor: R$ " + rs.getDouble("valor") + "\n"
+                          + "Data: " + rs.getDate("dataTransacao");
+            
+            JOptionPane.showMessageDialog(null, recibo);
+        } else {
+            JOptionPane.showMessageDialog(null, "Transação não encontrada.");
+        }
+        
+        conn.close();
+        stmt.close();
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro ao buscar transação: " + e.getMessage());
+    }
 }
 
 }
