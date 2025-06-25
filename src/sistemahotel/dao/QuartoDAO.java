@@ -42,3 +42,4 @@ public class QuartoDAO {
         return quartos;
     }
 }
+ 
