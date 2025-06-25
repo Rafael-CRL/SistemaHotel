@@ -24,7 +24,7 @@ public class FinanceiroController {
 
     public void registrarPagamento(Date data, String tipo, double valor, String descricao) {
     Financeiro fin = new Financeiro();
-    fin.setDataTransacao(data);
+    fin.setDataTransacao((java.sql.Date) data);
     fin.setTipo(tipo);
     fin.setValor(valor);
     fin.setDescricao(descricao);
