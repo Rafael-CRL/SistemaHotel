@@ -110,6 +110,11 @@ public class MenuViewGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.out.println("Chamando Reserva(Daniel)");
         System.out.println("A ser implementado");
+        
+        ReservaView reservaView = new ReservaView();
+        reservaView.setVisible(true);
+        this.setVisible(false);
+        
     }//GEN-LAST:event_btnReservasActionPerformed
 
     private void btnGestaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestaoActionPerformed

@@ -4,7 +4,7 @@
  */
 package sistemahotel.model;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  *
@@ -62,7 +62,7 @@ public class Financeiro {
         this.tipo = tipo;
     }
 
-    public Date getDataTransacao() {
+    public java.util.Date getDataTransacao() {
         return dataTransacao;
     }
 
@@ -75,6 +75,6 @@ public class Financeiro {
     }
     
     public void setDescricao(String descricao){
-        this.descricao = this.descricao;
+        this.descricao = descricao;
     }
 }
