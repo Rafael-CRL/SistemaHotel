@@ -12,35 +12,38 @@ import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import sistemahotel.model.Transacao;
+import sistemahotel.model.Financeiro;
 
-public class TransacaoDAO {
+public class FinanceiroDAO {
     
     
     //metodo para registrar um pagamento no banco de dados
-    public void registrarPagamento(Transacao transacao){
-        String sql = "INSERT INTO transacoes (id_reservas, valor, tipo,"
-                + " dataTransacao) VALUES (?, ?, ?, ?)";
-        try {
-            Connection conn = ConnectionFactory.getConexao();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            
-            stmt.setInt(1, transacao.getId_reservas());
-            stmt.setDouble(2, transacao.getValor());
-            stmt.setString(3, transacao.getTipo());
-            stmt.setDate(4, new java.sql.Date(transacao.getDataTransacao().getTime()));
-            stmt.executeUpdate();
-            System.out.println("Transacao registrada com sucesso");
-            stmt.close();
-            conn.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao registrar transacao" + e);
-        }
+public void registrarPagamento(Financeiro transacao) {
+    String sql = "INSERT INTO transacoes (Id_reservas, valor, tipo, dataTransacao, descricao) VALUES (?, ?, ?, ?, ?)";
+
+    try {
+        Connection conn = ConnectionFactory.getConexao();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+
+        stmt.setInt(1, transacao.getId_reservas());
+        stmt.setDouble(2, transacao.getValor());
+        stmt.setString(3, transacao.getTipo());
+        stmt.setDate(4, new java.sql.Date(transacao.getDataTransacao().getTime()));
+        stmt.setString(5, transacao.getDescricao());
+
+        stmt.executeUpdate();
+        System.out.println("Transação registrada com sucesso");
+        stmt.close();
+        conn.close();
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro ao registrar transação: " + e);
     }
+}
+
     
     //metodo para buscar transção por data efetuada no banco de dados
-    public List<Transacao> buscarTransacoesDoDia(Date date){
-        List<Transacao> transacoes = new ArrayList<>();
+    public List<Financeiro> buscarTransacoesDoDia(Date date){
+        List<Financeiro> transacoes = new ArrayList<>();
         String sql = "SELECT * FROM transacoes WHERE dataTransacao = ?";
         
         
@@ -52,7 +55,7 @@ public class TransacaoDAO {
             ResultSet rs = stmt.executeQuery();
             
             while(rs.next()){
-                Transacao t = new Transacao();
+                Financeiro t = new Financeiro();
                 t.setId(rs.getInt("id"));
                 t.setId_reservas(rs.getInt("id_reservas"));
                 t.setValor(rs.getDouble("valor"));
@@ -105,7 +108,7 @@ public class TransacaoDAO {
         return entradas - saida;
     }
     
-    public String emitirRecibo(Transacao transacao) {
+    public String emitirRecibo(Financeiro transacao) {
     StringBuilder recibo = new StringBuilder();
     recibo.append("------ RECIBO DE PAGAMENTO ------\n");
     recibo.append("ID da Transação: ").append(transacao.getId()).append("\n");
