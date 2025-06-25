@@ -79,7 +79,7 @@ public void registrarPagamento(Financeiro transacao) {
         double entradas = 0;
         double saida = 0;
         
-        String sql = "SELEC tipo, valor FROM transacoes WHERE dataTransacao = ?";
+        String sql = "SELECT tipo, valor FROM transacoes WHERE dataTransacao = ?";
         
         try {
             Connection conn = ConnectionFactory.getConexao();
