@@ -42,7 +42,15 @@ public class FinanceiroController {
         return dao.buscarTransacoesDoDia((java.sql.Date) data);
     }
 
-    public String emitirRecibo(Financeiro transacao) {
-        return dao.emitirRecibo(transacao);
-    }
+  public void imprimirRecibo(int id) {
+       FinanceiroDAO dao = new FinanceiroDAO();
+           dao.imprimirRecibo(id);
+}
+
+    
+    public Financeiro buscarTransacaoPorId(int id) {
+    FinanceiroDAO dao = new FinanceiroDAO();
+    return dao.buscarPorId(id);
+}
+
 }
