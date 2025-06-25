@@ -294,6 +294,7 @@ public class FinanceiroView extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnBuscarSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarSaldoActionPerformed
