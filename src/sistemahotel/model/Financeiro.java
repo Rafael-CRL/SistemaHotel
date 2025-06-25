@@ -4,29 +4,31 @@
  */
 package sistemahotel.model;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  *
  * @author Ray Carvalho
  */
 
-public class Transacao {
+public class Financeiro {
    private int id;
    private int id_reservas;
    private double valor;
    private String tipo;
    private  Date dataTransacao;
+   private String descricao;
 
-    public Transacao(int id, int id_reservas, double valor, String tipo, Date dataTransacao) {
+    public Financeiro(int id, int id_reservas, double valor, String tipo, Date dataTransacao, String descricao) {
         this.id = id;
         this.id_reservas = id_reservas;
         this.valor = valor;
         this.tipo = tipo;
         this.dataTransacao = dataTransacao;
+        this.descricao = descricao;
     }
-   
-   public Transacao(){}
+
+   public Financeiro(){}
 
     public int getId() {
         return id;
@@ -60,14 +62,19 @@ public class Transacao {
         this.tipo = tipo;
     }
 
-    public Date getDataTransacao() {
+    public java.util.Date getDataTransacao() {
         return dataTransacao;
     }
 
     public void setDataTransacao(Date dataTransacao) {
         this.dataTransacao = dataTransacao;
     }
-   
-   
-   
+
+    public String getDescricao() {
+      return descricao;
+    }
+    
+    public void setDescricao(String descricao){
+        this.descricao = descricao;
+    }
 }

@@ -11,15 +11,15 @@ public class ConnectionFactory {
     private static final String PASSWORD = "REMOVIDO";
 
     public static Connection getConexao() {
-        if (conn == null) {
-            try {
+        try {
+            if (conn == null || conn.isClosed()) {
                 conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            } catch (SQLException e) {
-                System.err.println("ERRO: Falha ao conectar ao banco.");
-                e.printStackTrace();
-                return null;
             }
+        } catch (SQLException e) {
+            System.err.println("ERRO: Falha ao conectar ao banco.");
+            e.printStackTrace();
+            return null;
         }
         return conn;
-    }
+        }
 }
