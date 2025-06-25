@@ -1,5 +1,6 @@
 package sistemahotel.controller;
 
+import javax.swing.JOptionPane;
 import sistemahotel.dao.UsuarioDAO;
 import sistemahotel.model.Usuario;
 
@@ -28,7 +29,7 @@ public class AutenticaController {
             }
         }
         
-        System.out.println("CPF ou senha inválidos.");
+        System.out.println("CPF ou senha inválidos");
         return false;
     }
 }
