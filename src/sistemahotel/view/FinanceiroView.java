@@ -93,6 +93,11 @@ public class FinanceiroView extends javax.swing.JFrame {
         BtnRegistrar.setText("Registrar");
 
         cbxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pagamento", "Recebimento" }));
+        cbxTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxTipoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -308,6 +313,10 @@ public class FinanceiroView extends javax.swing.JFrame {
        menuViewGUI.setVisible(true);
        
     }//GEN-LAST:event_BtnVoltarMenuActionPerformed
+
+    private void cbxTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxTipoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxTipoActionPerformed
 
     /**
      * @param args the command line arguments
