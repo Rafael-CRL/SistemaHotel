@@ -10,7 +10,9 @@ package sistemahotel.controller;
  */
 
 import sistemahotel.dao.ReservaDAO;
+import sistemahotel.dao.QuartoDAO;
 import sistemahotel.model.Reserva;
+import sistemahotel.model.Quarto;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -18,9 +20,11 @@ import java.util.concurrent.TimeUnit;
 
 public class ReservaController {
     private ReservaDAO reservaDAO;
+    private QuartoDAO quartoDAO;
 
     public ReservaController() {
         this.reservaDAO = new ReservaDAO();
+        this.quartoDAO = new QuartoDAO();
     }
 
     public void criarReserva(int idQuarto, int idHospede, Date dataEntrada, Date dataSaida, double valorTotal, String status) throws Exception {
@@ -37,6 +41,15 @@ public class ReservaController {
         }
         Reserva reserva = new Reserva(idQuarto, idHospede, dataEntrada, dataSaida, valorTotal, status);
         reservaDAO.criarReserva(reserva);
+
+        // Atualizar o status do quarto para "Ocupado"
+        Quarto quarto = quartoDAO.buscarPorId(idQuarto);
+        if (quarto != null) {
+            quarto.setStatus("Ocupado");
+            quartoDAO.atualizar(quarto);
+        } else {
+            throw new Exception("Quarto não encontrado.");
+        }
     }
 
     public void realizarCheckIn(int idReserva) throws Exception {

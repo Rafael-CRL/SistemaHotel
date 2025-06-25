@@ -87,10 +87,12 @@ public class FinanceiroView extends javax.swing.JFrame {
 
         jLabel5.setText("Valor:");
 
+
         BtnRegistrar.setText("Registrar");
         BtnRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnRegistrarActionPerformed(evt);
+              
             }
         });
 
@@ -364,6 +366,10 @@ public class FinanceiroView extends javax.swing.JFrame {
     private void TxtDataDoSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtDataDoSaldoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TxtDataDoSaldoActionPerformed
+
+    private void cbxTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxTipoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxTipoActionPerformed
 
     /**
      * @param args the command line arguments
