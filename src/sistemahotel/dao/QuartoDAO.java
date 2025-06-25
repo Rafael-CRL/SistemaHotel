@@ -4,43 +4,42 @@
  */
 package sistemahotel.dao;
 
-/**
- *
- * @author LabLa
- */
+import java.sql.*;
 import sistemahotel.model.Quarto;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class QuartoDAO {
-    public Quarto buscarPorId(int id) throws SQLException {
-        String sql = "SELECT * FROM quartos WHERE id = ?";
-        try (Connection conn = ConnectionFactory.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    Quarto q = new Quarto();
-                    q.setId(rs.getInt("id"));
-                    q.setNumero(rs.getString("numero"));
-                    q.setTipo(rs.getString("tipo"));
-                    q.setStatus(rs.getString("status"));
-                    return q;
-                }
-            }
-        }
-        return null;
+
+    public void cadastrarQuarto(Quarto quarto) throws SQLException {
+        Connection con = ConnectionFactory.getConexao();
+        String sql = "INSERT INTO quartos (numero, tipo, status) VALUES (?, ?, ?)";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setString(1, quarto.getNumero());
+        stmt.setString(2, quarto.getTipo());
+        stmt.setString(3, quarto.getStatus());
+        stmt.executeUpdate();
+        con.close();
     }
 
-    public void atualizar(Quarto quarto) throws SQLException {
-        String sql = "UPDATE quartos SET status = ? WHERE id = ?";
-        try (Connection conn = ConnectionFactory.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, quarto.getStatus());
-            stmt.setInt(2, quarto.getId());
-            stmt.executeUpdate();
+    public List<Quarto> listarQuartosDisponiveis() throws SQLException {
+        List<Quarto> quartos = new ArrayList<>();
+        Connection con = ConnectionFactory.getConexao();
+        String sql = "SELECT * FROM quartos WHERE status = 'Disponível'";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            Quarto q = new Quarto(
+                rs.getInt("id"),
+                rs.getString("numero"),
+                rs.getString("tipo"),
+                rs.getString("status")
+            );
+            quartos.add(q);
         }
+        con.close();
+        return quartos;
     }
 }
+ 
