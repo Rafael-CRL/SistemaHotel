@@ -4,7 +4,10 @@
  */
 package sistemahotel.view;
 
+import javax.swing.JOptionPane;
 import sistemahotel.controller.AutenticaController;
+import sistemahotel.model.Funcionario;
+import sistemahotel.view.MenuViewGUI;
 
 /**
  *
@@ -121,28 +124,24 @@ public class LoginViewGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCpfActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-         // TODO add your handling code here:
-        
         AutenticaController authController = new AutenticaController();
 
-        // Pegar os dados digitados na tela
-         String cpf = txtCpf.getText();
-         String senha = new String(txtSenha.getPassword()); // JPasswordField usa getPassword
+        String cpf = txtCpf.getText();
+        String senha = new String(txtSenha.getPassword());
 
-         boolean sucesso = authController.autenticar(cpf, senha);
+        //retorna um objeto Funcionario
+        Funcionario usuarioLogado = authController.autenticar(cpf, senha);
 
-         if (sucesso) {
-             System.out.println("Login gráfico bem-sucedido!"); // Mensagem para seu controle no console
-        
-            // Crie e exiba a tela de menu
-            MenuViewGUI menu = new MenuViewGUI();
+        // Verifica se nao e nulho
+        if (usuarioLogado != null) {
+            // O objeto do usuario logado e passado para o construct do menuu
+            MenuViewGUI menu = new MenuViewGUI(usuarioLogado);
             menu.setVisible(true);
 
-             this.dispose(); 
-          } else {
-
-        javax.swing.JOptionPane.showMessageDialog(this, "CPF ou Senha inválidos.", "Erro de Login", javax.swing.JOptionPane.ERROR_MESSAGE);
-    }
+            this.dispose(); 
+        } else {
+            JOptionPane.showMessageDialog(this, "CPF ou Senha inválidos.", "Erro de Login", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed

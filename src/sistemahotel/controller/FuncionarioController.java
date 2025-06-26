@@ -89,4 +89,13 @@ public class FuncionarioController {
             return Collections.emptyList(); // Evita quebra na View
         }
     }
+    
+    public Funcionario buscarFuncionarioPorId(int id) {
+    try {
+        return funcionarioDAO.buscarPorId(id);
+    } catch (SQLException e) {
+        System.err.println("Erro no Controller ao buscar funcionário por ID: " + e.getMessage());
+        return null; // Retorna null em caso de erro de banco de dados
+    }
+}
 }

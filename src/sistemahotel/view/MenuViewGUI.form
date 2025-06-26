@@ -35,8 +35,11 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="btnReservas" max="32767" attributes="0"/>
-                  <Component id="btnGestao" max="32767" attributes="0"/>
+                  <Component id="btnGerenciarFuncionarios" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="btnReservas" max="32767" attributes="0"/>
+                      <Component id="btnGestao" max="32767" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace pref="54" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -62,7 +65,9 @@
                   <Component id="btnReservas" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
                   <Component id="btnSair" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="71" max="32767" attributes="0"/>
+              <EmptySpace pref="26" max="32767" attributes="0"/>
+              <Component id="btnGerenciarFuncionarios" min="-2" pref="39" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -106,6 +111,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSairActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnGerenciarFuncionarios">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Gerenciar Funcionarios"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGerenciarFuncionariosActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

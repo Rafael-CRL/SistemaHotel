@@ -135,4 +135,35 @@ public class FuncionarioDAO {
         }
         return funcionarios;
     }
+    
+    public Funcionario buscarPorId(int id) throws SQLException {
+        String sql = "SELECT * FROM funcionarios WHERE id = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Funcionario func = new Funcionario();
+                    func.setId(rs.getInt("id"));
+                    func.setNome(rs.getString("nome"));
+                    func.setCpf(rs.getString("cpf"));
+                    func.setCargo(rs.getString("cargo"));
+                    if (rs.getDate("data_admissao") != null) {
+                        func.setDataAdmissao(rs.getDate("data_admissao").toLocalDate());
+                    }
+                    if (rs.getBigDecimal("salario") != null) {
+                        func.setSalario(rs.getBigDecimal("salario"));
+                    }
+                    func.setLogin(rs.getString("login"));
+                    func.setSenha(rs.getString("senha"));
+                    func.setStatus(rs.getString("status"));
+                    func.setEmail(rs.getString("email"));
+                    func.setTelefone(rs.getString("telefone"));
+                    return func;
+                }
+            }
+        }
+        return null; // Retorna null se não encontrar o funcionário
+    }
 }
