@@ -4,35 +4,42 @@
  */
 package sistemahotel.controller;
 
+
 import java.sql.SQLException;
 import sistemahotel.dao.QuartoDAO;
 import sistemahotel.dao.HospedeDAO;
 import sistemahotel.model.Quarto;
 import sistemahotel.model.Hospede;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class CadastroController {
-    private QuartoDAO quartoDAO = new QuartoDAO();
-    private HospedeDAO hospedeDAO = new HospedeDAO();
+    private final QuartoDAO quartoDAO = new QuartoDAO();
+    private final HospedeDAO hospedeDAO = new HospedeDAO();
 
-    public void cadastrarQuarto(String numero, String tipo) {
-        Quarto quarto = new Quarto(0, numero, tipo, "Disponível");
-        try {
-            quartoDAO.cadastrarQuarto(quarto);
-            System.out.println("Quarto cadastrado com sucesso.");
-        } catch (SQLException e) {
-            System.out.println("Erro ao cadastrar quarto: " + e.getMessage());
+    public boolean cadastrarQuarto(String numero, String tipo) {
+        if (numero == null || numero.isBlank() || tipo == null || tipo.isBlank()) {
+            JOptionPane.showMessageDialog(null, "Número e tipo do quarto não podem estar vazios.");
+            throw new IllegalArgumentException("Número e tipo do quarto não podem estar vazios.");
         }
+
+        Quarto quarto = new Quarto(0, numero.trim(), tipo.trim(), "Disponível");
+
+        return quartoDAO.cadastrarQuarto(quarto);
     }
 
-    public void cadastrarHospede(String nome, String cpf) {
-        Hospede hospede = new Hospede(0, nome, cpf);
-        try {
-            hospedeDAO.cadastrarHospede(hospede);
-            System.out.println("Hóspede cadastrado com sucesso.");
-        } catch (SQLException e) {
-            System.out.println("Erro ao cadastrar hóspede: " + e.getMessage());
+    public boolean cadastrarHospede(String nome, String cpf) {
+        if (nome == null || nome.isBlank() || cpf == null || cpf.isBlank()) {
+            JOptionPane.showMessageDialog(null, "Nome e CPF não podem estar vazios.");
+            throw new IllegalArgumentException("Nome e CPF não podem estar vazios.");
         }
+
+        // Remover pontuação do CPF
+        cpf = cpf.replaceAll("[^0-9]", "");
+
+        Hospede hospede = new Hospede(0, nome.trim(), cpf);
+
+        return hospedeDAO.cadastrarHospede(hospede);
     }
 
     public void listarQuartosDisponiveis() {
@@ -42,7 +49,7 @@ public class CadastroController {
                 System.out.println("ID: " + q.getId() + ", Número: " + q.getNumero() + ", Tipo: " + q.getTipo());
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao listar quartos: " + e.getMessage());
+            System.err.println("Erro ao listar quartos: " + e.getMessage());
         }
     }
 }
