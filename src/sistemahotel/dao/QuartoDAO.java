@@ -11,16 +11,24 @@ import java.util.List;
 
 public class QuartoDAO {
 
-    public void cadastrarQuarto(Quarto quarto) throws SQLException {
-        Connection con = ConnectionFactory.getConexao();
-        String sql = "INSERT INTO quartos (numero, tipo, status) VALUES (?, ?, ?)";
-        PreparedStatement stmt = con.prepareStatement(sql);
+public boolean cadastrarQuarto(Quarto quarto) {
+    String sql = "INSERT INTO quartos (numero, tipo, status) VALUES (?, ?, ?)";
+
+    try (Connection con = ConnectionFactory.getConexao();
+         PreparedStatement stmt = con.prepareStatement(sql)) {
+
         stmt.setString(1, quarto.getNumero());
         stmt.setString(2, quarto.getTipo());
         stmt.setString(3, quarto.getStatus());
         stmt.executeUpdate();
-        con.close();
+        return true;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
     }
+}
+
 
     public List<Quarto> listarQuartosDisponiveis() throws SQLException {
         List<Quarto> quartos = new ArrayList<>();
