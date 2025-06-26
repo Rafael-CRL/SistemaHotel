@@ -11,6 +11,10 @@ import java.util.List;
 import java.util.ArrayList;
 import sistemahotel.model.Transacao;
 
+/**
+ *
+ * @author Ray Carvalho
+ */
 public class FinanceiroDAO {
     
     private Connection conn;
@@ -24,10 +28,10 @@ public class FinanceiroDAO {
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, transacao.getIdReserva());
-            // ALTERAÇÃO AQUI: Usar setBigDecimal para valores monetários.
+            //Usar setBigDecimal para valores monetários.
             stmt.setBigDecimal(2, transacao.getValor());
             stmt.setString(3, transacao.getTipo());
-            // ALTERAÇÃO AQUI: Usar Timestamp para salvar data e hora exata.
+            //Usar Timestamp para salvar data e hora exata.
             stmt.setTimestamp(4, Timestamp.valueOf(transacao.getDataTransacao()));
             stmt.setString(5, transacao.getStatus());
             
@@ -40,7 +44,7 @@ public class FinanceiroDAO {
         String sql = "SELECT * FROM transacoes WHERE DATE(data_transacao) = ?";
         
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            // ALTERAÇÃO AQUI: Converter o LocalDate moderno para o java.sql.Date que o JDBC espera.
+            //Converter o LocalDate moderno para o java.sql.Date que o jdbc espera.
             stmt.setDate(1, Date.valueOf(data));
             
             try (ResultSet rs = stmt.executeQuery()) {
@@ -48,10 +52,10 @@ public class FinanceiroDAO {
                     Transacao t = new Transacao();
                     t.setId(rs.getInt("id"));
                     t.setIdReserva(rs.getInt("id_reserva"));
-                    // ALTERAÇÃO AQUI: Usar getBigDecimal para ler valores monetários do banco.
+                    //Usar getBigDecimal para ler valores monetários do banco.
                     t.setValor(rs.getBigDecimal("valor"));
                     t.setTipo(rs.getString("tipo"));
-                    // ALTERAÇÃO AQUI: Ler um Timestamp do banco e converter para o moderno LocalDateTime.
+                    //Timestamp do banco e converter para o moderno LocalDateTime.
                     t.setDataTransacao(rs.getTimestamp("data_transacao").toLocalDateTime());
                     t.setStatus(rs.getString("status"));
                     transacoes.add(t);

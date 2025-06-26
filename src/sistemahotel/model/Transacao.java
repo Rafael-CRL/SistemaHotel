@@ -1,27 +1,25 @@
-/*
- * Classe de modelo que representa uma transação financeira no sistema.
- */
 package sistemahotel.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ *
+ * @author Ray Carvalho
+ */
+
 public class Transacao {
 
     private int id;
-    private int idReserva; // Corrigido para o padrão camelCase
-    private BigDecimal valor; // Corrigido para BigDecimal, ideal para valores monetários
+    private int idReserva;
+    private BigDecimal valor;
     private String tipo;
-    private LocalDateTime dataTransacao; // Corrigido para a API moderna de Data/Hora do Java
+    private LocalDateTime dataTransacao;
     private String status;
 
-    /**
-     * Construtor padrão.
-     */
     public Transacao() {
     }
 
-    // Getters e Setters para todos os atributos
 
     public int getId() {
         return id;

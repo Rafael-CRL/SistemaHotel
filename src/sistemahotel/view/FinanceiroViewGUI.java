@@ -82,7 +82,7 @@ public class FinanceiroViewGUI extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        jLabel2.setText("ID Rserva:");
+        jLabel2.setText("ID Reserva:");
 
         jLabel3.setText("Valor:");
 
@@ -230,22 +230,21 @@ public class FinanceiroViewGUI extends javax.swing.JFrame {
 
     private void BTNRegistrarPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNRegistrarPagamentoActionPerformed
         try {
-            // Ler os dados da tela, incluindo a data
+            //Ler os dados da tela, incluindo a data
             int idReserva = Integer.parseInt(TxtIDReserva.getText());
             BigDecimal valor = new BigDecimal(TxtValor.getText());
             String tipo = (String) CBXTipo.getSelectedItem();
-            String dataTexto = TxtData.getText(); // Pega a data como texto
+            String dataTexto = TxtData.getText();
 
-            // Converte o texto da data para o objeto LocalDate que o Controller espera
+            //Converte o texto da data para o objeto LocalDate que o Controller espera
             java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
             java.time.LocalDate data = java.time.LocalDate.parse(dataTexto, formatter);
 
-            // Chamada nova, AGORA com a data
+            //Chamada nova agra com a data
             boolean sucesso = financeiroController.registrarPagamento(idReserva, valor, tipo, data);
 
             if (sucesso) {
                 JOptionPane.showMessageDialog(this, "Pagamento registrado com sucesso!");
-                // ... limpar campos, etc.
             } else {
                 JOptionPane.showMessageDialog(this, "Falha ao registrar o pagamento.");
             }
@@ -260,21 +259,18 @@ public class FinanceiroViewGUI extends javax.swing.JFrame {
 
     private void BTNSaldoDoDiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNSaldoDoDiaActionPerformed
         try {
-            // 1. Ler a data da tela
             String dataTexto = TxtData.getText();
             if (dataTexto.trim().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Por favor, digite uma data no formato dd/MM/yyyy.", "Atenção", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            // 2. Converter a data para o formato que o Controller espera
+            //Converter a data para o formato que o Controller espera
             java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
             java.time.LocalDate data = java.time.LocalDate.parse(dataTexto, formatter);
 
-            // 3. Chamar o Controller e pegar o resultado
             BigDecimal saldo = financeiroController.calcularSaldoDiario(data);
 
-            // 4. Exibir o resultado
             JOptionPane.showMessageDialog(this, "O saldo do dia " + dataTexto + " é: R$ " + saldo, "Saldo do Dia", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (java.time.format.DateTimeParseException e) {
@@ -302,10 +298,9 @@ public class FinanceiroViewGUI extends javax.swing.JFrame {
         try {
             int idTransacao = Integer.parseInt(idTransacaoStr);
 
-            // Chama o controller para gerar o texto do recibo
+            //Chama o controller para gerar o texto do recibo
             String recibo = financeiroController.gerarReciboTexto(idTransacao);
 
-            // Exibe o recibo em uma área de texto dentro de um JOptionPane para melhor visualização
             javax.swing.JTextArea textArea = new javax.swing.JTextArea(recibo);
             textArea.setEditable(false);
             javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane(textArea);
