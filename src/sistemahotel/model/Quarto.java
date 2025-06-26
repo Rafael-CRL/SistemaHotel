@@ -54,6 +54,11 @@ public class Quarto {
     public void setStatus(String status) {
         this.status = status;
     }
+    
+    public String toString() {
+
+        return "Quarto " + this.getNumero() + " (" + this.getTipo() + ") - " + this.getStatus();
+    }
 
     
 }
