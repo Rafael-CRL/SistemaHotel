@@ -4,23 +4,18 @@
  */
 package sistemahotel.dao;
 
-/**
- *
- * @author Ray Carvalho
- */
+import java.math.BigDecimal;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
-import sistemahotel.model.Financeiro;
+import sistemahotel.model.Transacao;
 
 public class FinanceiroDAO {
     
-    
-    //metodo para registrar um pagamento no banco de dados
-public void registrarPagamento(Financeiro transacao) {
-    String sql = "INSERT INTO transacoes (Id_reservas, valor, tipo, dataTransacao, descricao) VALUES (?, ?, ?, ?, ?)";
+    private Connection conn;
 
+<<<<<<< Updated upstream
     try {
         Connection conn = ConnectionFactory.getConexao();
         PreparedStatement stmt = conn.prepareStatement(sql);
@@ -37,9 +32,13 @@ public void registrarPagamento(Financeiro transacao) {
         conn.close();
     } catch (Exception e) {
         JOptionPane.showMessageDialog(null, "Erro ao registrar transação: " + e);
+=======
+    public FinanceiroDAO() {
+        this.conn = ConnectionFactory.getConexao();
+>>>>>>> Stashed changes
     }
-}
 
+<<<<<<< Updated upstream
     
     //metodo para buscar transção por data efetuada no banco de dados
     public List<Financeiro> buscarTransacoesDoDia(Date date){
@@ -51,52 +50,68 @@ public void registrarPagamento(Financeiro transacao) {
             Connection conn = ConnectionFactory.getConexao();
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setDate(1, new java.sql.Date(date.getTime()));
+=======
+    public void registrarPagamento(Transacao transacao) throws SQLException {
+        String sql = "INSERT INTO transacoes (id_reserva, valor, tipo, "
+                + "data_transacao, status) VALUES (?, ?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, transacao.getIdReserva());
+            stmt.setBigDecimal(2, transacao.getValor());
+            stmt.setString(3, transacao.getTipo());
+            stmt.setTimestamp(4, Timestamp.valueOf(transacao.getDataTransacao()));
+            stmt.setString(5, transacao.getStatus());
             
-            ResultSet rs = stmt.executeQuery();
+            stmt.executeUpdate();
+        }
+    }
+
+    public List<Transacao> buscarTransacoesPorData(LocalDate data) throws SQLException {
+        List<Transacao> transacoes = new ArrayList<>();
+        String sql = "SELECT * FROM transacoes WHERE DATE(data_transacao) = ?";
+        
+        try (
+                PreparedStatement stmt = conn.prepareStatement(sql)
+                ) {
+                stmt.setDate(1, Date.valueOf(data));
+>>>>>>> Stashed changes
             
-            while(rs.next()){
-                Financeiro t = new Financeiro();
-                t.setId(rs.getInt("id"));
-                t.setId_reservas(rs.getInt("id_reservas"));
-                t.setValor(rs.getDouble("valor"));
-                t.setTipo(rs.getString("tipo"));
-                t.setDataTransacao(rs.getDate("dataTransacao"));
-                
-                transacoes.add(t);
+            try (
+                    ResultSet rs = stmt.executeQuery()) {
+                while(rs.next()) {
+                    Transacao t = new Transacao();
+                    t.setId(rs.getInt("id"));
+                    t.setIdReserva(rs.getInt("id_reserva"));
+                    t.setValor(rs.getBigDecimal("valor"));
+                    t.setTipo(rs.getString("tipo"));
+                    t.setDataTransacao(rs.getTimestamp("data_transacao").toLocalDateTime());
+                    t.setStatus(rs.getString("status"));
+                    transacoes.add(t);
+                }
             }
-            rs.close();
-            stmt.close();
-            conn.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao buscar transações: "
-                    + e.getMessage());
         }
         return transacoes;
     }
-    
-    //metodo para calcular o saldo do dia.
-    public double calcularSaldoDoDia(Date data){
-        double entradas = 0;
-        double saida = 0;
-        
-        String sql = "SELECT tipo, valor FROM transacoes WHERE dataTransacao = ?";
-        
-        try {
-            Connection conn = ConnectionFactory.getConexao();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setDate(1, new java.sql.Date(data.getTime()));
-            
-            ResultSet rs = stmt.executeQuery();
-            
-            while(rs.next()){
-                String tipo = rs.getString("tipo");
-                double valor = rs.getDouble("valor");
-                
-                if(tipo.equalsIgnoreCase("Entrada")){
-                    entradas += valor;
-            }else if(tipo.equalsIgnoreCase("Saida")){
-                saida += valor;
+
+    public Transacao buscarPorId(int id) throws SQLException {
+        String sql = "SELECT * FROM transacoes WHERE id = ?";
+        try (
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, id);
+            try (
+                    ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Transacao t = new Transacao();
+                    t.setId(rs.getInt("id"));
+                    t.setIdReserva(rs.getInt("id_reserva"));
+                    t.setValor(rs.getBigDecimal("valor"));
+                    t.setTipo(rs.getString("tipo"));
+                    t.setDataTransacao(rs.getTimestamp("data_transacao").toLocalDateTime());
+                    t.setStatus(rs.getString("status"));
+                    return t;
+                }
             }
+<<<<<<< Updated upstream
           }
             
            rs.close();
@@ -150,3 +165,9 @@ public void registrarPagamento(Financeiro transacao) {
 }
 
 }
+=======
+        }
+        return null;
+    }
+}
+>>>>>>> Stashed changes
