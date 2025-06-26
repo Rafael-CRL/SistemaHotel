@@ -118,6 +118,11 @@ public class FinanceiroViewGUI extends javax.swing.JFrame {
         BTNExPDF.setText("Exportar PDF");
 
         BTNExCVS.setText("Exportar CVS");
+        BTNExCVS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTNExCVSActionPerformed(evt);
+            }
+        });
 
         BTNVoltar.setText("Voltar ao Menu");
         BTNVoltar.addActionListener(new java.awt.event.ActionListener() {
@@ -311,6 +316,10 @@ public class FinanceiroViewGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor, digite um ID válido (número).", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_BTNEmitirReciboActionPerformed
+
+    private void BTNExCVSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNExCVSActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BTNExCVSActionPerformed
 
     /**
      * @param args the command line arguments
