@@ -109,7 +109,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel4" linkSize="1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtCargo" min="-2" pref="200" max="-2" attributes="0"/>
+                          <Component id="cmbCargo" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel3" linkSize="1" min="-2" max="-2" attributes="0"/>
@@ -142,7 +142,7 @@
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel4" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtCargo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cmbCargo" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -234,8 +234,6 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtNome">
         </Component>
-        <Component class="javax.swing.JTextField" name="txtCargo">
-        </Component>
         <Component class="javax.swing.JTextField" name="txtSalario">
         </Component>
         <Component class="javax.swing.JTextField" name="txtLogin">
@@ -265,6 +263,24 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtTelefone">
+        </Component>
+        <Component class="javax.swing.JComboBox" name="cmbCargo">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="4">
+                <StringItem index="0" value="Gerente"/>
+                <StringItem index="1" value="Recepcionista"/>
+                <StringItem index="2" value="Camareira"/>
+                <StringItem index="3" value="Servi&#xe7;os Gerais"/>
+              </StringArray>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbCargoActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

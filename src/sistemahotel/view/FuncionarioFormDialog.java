@@ -68,7 +68,6 @@ public class FuncionarioFormDialog extends javax.swing.JDialog {
         jLabel10 = new javax.swing.JLabel();
         txtCpf = new javax.swing.JTextField();
         txtNome = new javax.swing.JTextField();
-        txtCargo = new javax.swing.JTextField();
         txtSalario = new javax.swing.JTextField();
         txtLogin = new javax.swing.JTextField();
         txtEmail = new javax.swing.JTextField();
@@ -77,6 +76,7 @@ public class FuncionarioFormDialog extends javax.swing.JDialog {
         cmbStatus = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
         txtTelefone = new javax.swing.JTextField();
+        cmbCargo = new javax.swing.JComboBox<>();
         Title = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
@@ -104,6 +104,13 @@ public class FuncionarioFormDialog extends javax.swing.JDialog {
         cmbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ativo", "inativo" }));
 
         jLabel11.setText("Data Admissão");
+
+        cmbCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Gerente", "Recepcionista", "Camareira", "Serviços Gerais" }));
+        cmbCargo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCargoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -143,7 +150,7 @@ public class FuncionarioFormDialog extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cmbCargo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -171,7 +178,7 @@ public class FuncionarioFormDialog extends javax.swing.JDialog {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
@@ -264,7 +271,7 @@ public class FuncionarioFormDialog extends javax.swing.JDialog {
             // Coleta todos os dados dos campos da tela
             String nome = txtNome.getText();
             String cpf = txtCpf.getText();
-            String cargo = txtCargo.getText();
+            String cargo = (String) cmbCargo.getSelectedItem();
             BigDecimal salario = new BigDecimal(txtSalario.getText());
             String login = txtLogin.getText();
             String senha = new String(txtSenha.getPassword());
@@ -323,12 +330,16 @@ public class FuncionarioFormDialog extends javax.swing.JDialog {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void cmbCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCargoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbCargoActionPerformed
     private void preencherFormulario() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         txtNome.setText(funcionario.getNome());
         txtCpf.setText(funcionario.getCpf());
-        txtCargo.setText(funcionario.getCargo());
+        cmbCargo.setSelectedItem(funcionario.getCargo());
         txtSalario.setText(funcionario.getSalario().toString());
         txtLogin.setText(funcionario.getLogin());
         txtEmail.setText(funcionario.getEmail());
@@ -386,6 +397,7 @@ public class FuncionarioFormDialog extends javax.swing.JDialog {
     private javax.swing.JLabel Title;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnSalvar;
+    private javax.swing.JComboBox<String> cmbCargo;
     private javax.swing.JComboBox<String> cmbStatus;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -398,7 +410,6 @@ public class FuncionarioFormDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField txtCargo;
     private javax.swing.JTextField txtCpf;
     private javax.swing.JTextField txtDataAdmissao;
     private javax.swing.JTextField txtEmail;
