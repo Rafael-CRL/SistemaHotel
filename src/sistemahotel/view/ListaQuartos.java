@@ -6,30 +6,31 @@ package sistemahotel.view;
 
 import java.util.List;
 import javax.swing.JOptionPane;
-import sistemahotel.controller.FuncionarioController;
-import sistemahotel.model.Funcionario;
+import sistemahotel.controller.CadastroController;
+import sistemahotel.model.Quarto;
 
 /**
  *
  * @author rafael
  */
-public class FuncionarioViewGUI extends javax.swing.JFrame {
+public class ListaQuartos extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FuncionarioViewGUI.class.getName());
-    private FuncionarioController funcionarioController;
-    private MenuViewGUI telaAnterior;
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ListaQuartos.class.getName());
+    private CadastroController cadastroController ;
+    private GestaoView telaAnterior;
     /**
      * Creates new form FuncionarioViewGUI
      */
-    public FuncionarioViewGUI(){
-        this(null);
+    public ListaQuartos(){
+       this(null);
     }
-    public FuncionarioViewGUI(MenuViewGUI telaAnterior) {
+    
+    public ListaQuartos(GestaoView telaAnterior) {
         initComponents();
         this.telaAnterior = telaAnterior;
-        this.funcionarioController = new FuncionarioController();
+        this.cadastroController = new CadastroController();
         atualizarTabela();
-        
+    
     }
 
     /**
@@ -44,7 +45,7 @@ public class FuncionarioViewGUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         btnExluir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblFuncionarios = new javax.swing.JTable();
+        tblQuartos = new javax.swing.JTable();
         btnAdicionar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         jbVoltar = new javax.swing.JButton();
@@ -52,7 +53,7 @@ public class FuncionarioViewGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
-        jLabel1.setText("Cadastro de Funcionários");
+        jLabel1.setText("Lista de Quartos");
 
         btnExluir.setText("Excluir");
         btnExluir.addActionListener(new java.awt.event.ActionListener() {
@@ -61,18 +62,18 @@ public class FuncionarioViewGUI extends javax.swing.JFrame {
             }
         });
 
-        tblFuncionarios.setModel(new javax.swing.table.DefaultTableModel(
+        tblQuartos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "ID", "Nome", "CPF", "Cargo", "Salario", "Status"
+                "ID", "Numero", "Tipo", "Status"
             }
         ));
-        jScrollPane1.setViewportView(tblFuncionarios);
+        jScrollPane1.setViewportView(tblQuartos);
 
         btnAdicionar.setText("Adicionar");
         btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
@@ -112,9 +113,9 @@ public class FuncionarioViewGUI extends javax.swing.JFrame {
                 .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(47, 47, 47)
                 .addComponent(btnExluir, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(101, 101, 101)
-                .addComponent(jbVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(103, 103, 103))
+                .addGap(85, 85, 85)
+                .addComponent(jbVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(90, 90, 90))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addContainerGap(653, Short.MAX_VALUE)
@@ -126,13 +127,13 @@ public class FuncionarioViewGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jbVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnExluir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnExluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(14, 14, 14))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -146,17 +147,17 @@ public class FuncionarioViewGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExluirActionPerformed
-        int selectedRow = tblFuncionarios.getSelectedRow();
+        int selectedRow = tblQuartos.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Por favor, selecione um funcionário para excluir.");
+            JOptionPane.showMessageDialog(this, "Por favor, selecione um quarto para excluir.");
             return;
         }
 
         int confirm = JOptionPane.showConfirmDialog(this, "Tem certeza?", "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
 
         if (confirm == JOptionPane.YES_OPTION) {
-            int idFuncionario = (int) tblFuncionarios.getValueAt(selectedRow, 0);
-            boolean sucesso = funcionarioController.excluirFuncionario(idFuncionario);
+            int idQuarto = (int) tblQuartos.getValueAt(selectedRow, 0);
+            boolean sucesso = cadastroController.excluirQuarto(idQuarto);
 
             if (sucesso) {
                 JOptionPane.showMessageDialog(this, "Funcionário excluído com sucesso!");
@@ -168,56 +169,52 @@ public class FuncionarioViewGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExluirActionPerformed
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        FuncionarioFormDialog form = new FuncionarioFormDialog(this, true, this.funcionarioController, null, this);
-        form.setVisible(true);
+        QuartosFormDialog quar = new QuartosFormDialog(this, true, this.cadastroController, null, this);
+        quar.setVisible(true);
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        int selectedRow = tblFuncionarios.getSelectedRow();
+        int selectedRow = tblQuartos.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Por favor, selecione um funcionário na tabela para editar.");
             return;
         }
 
         // Pega o ID da primeira coluna da linha selecionada
-        int idFuncionario = (int) tblFuncionarios.getValueAt(selectedRow, 0);
+        int idQuarto = (int) tblQuartos.getValueAt(selectedRow, 0);
 
         // Busca o objeto completo do funcionário no banco
-        Funcionario funcParaEditar = funcionarioController.buscarFuncionarioPorId(idFuncionario);
+        Quarto QuaParaEditar = cadastroController.buscarQuartoPorId(idQuarto);
 
         // Abre o formulário, passando o objeto para preencher os campos (MODO EDIÇÃO)
-        FuncionarioFormDialog form = new FuncionarioFormDialog(this, true, this.funcionarioController, funcParaEditar, this);
-        form.setVisible(true);
+        QuartosFormDialog qua = new QuartosFormDialog(this, true, this.cadastroController, QuaParaEditar, this);
+        qua.setVisible(true);
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void jbVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbVoltarActionPerformed
-        this.dispose();
-           if (telaAnterior != null) {
+    this.dispose();        
+      if (telaAnterior != null) {
         telaAnterior.setVisible(true); // reabre a anterior
     }
-            
     }//GEN-LAST:event_jbVoltarActionPerformed
     
     public void atualizarTabela() {
     // Pega o "modelo" da sua JTable. É através do modelo que você manipula os dados.
-    javax.swing.table.DefaultTableModel tableModel = (javax.swing.table.DefaultTableModel) tblFuncionarios.getModel();
+   javax.swing.table.DefaultTableModel tableModel = (javax.swing.table.DefaultTableModel) tblQuartos.getModel();
     
     // Limpa a tabela, removendo todas as linhas existentes para evitar duplicatas.
     tableModel.setRowCount(0);
 
     // Busca a lista de funcionários do banco de dados através do controller.
-    List<Funcionario> funcionarios = funcionarioController.listarFuncionarios();
+   List<Quarto> quartos = cadastroController.listarQuartos();
 
     // Percorre a lista de funcionários e adiciona cada um como uma nova linha na tabela.
-    for (Funcionario f : funcionarios) {
+     for (Quarto q : quartos) {
         Object[] rowData = {
-            f.getId(),
-            f.getNome(),
-            f.getCpf(),
-            f.getCargo(),
-            f.getSalario(),
-            f.getStatus()
-            // Adicione os outros campos que você quiser exibir na tabela
+            q.getId(),
+            q.getNumero(),
+            q.getTipo(),
+            q.getStatus()
         };
         tableModel.addRow(rowData);
     }
@@ -244,7 +241,7 @@ public class FuncionarioViewGUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FuncionarioViewGUI().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new ListaQuartos().setVisible(true));
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -254,6 +251,6 @@ public class FuncionarioViewGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbVoltar;
-    private javax.swing.JTable tblFuncionarios;
+    private javax.swing.JTable tblQuartos;
     // End of variables declaration//GEN-END:variables
 }

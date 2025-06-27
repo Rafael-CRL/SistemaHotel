@@ -10,12 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuartoDAO {
+    private Connection conn;
+    
+public QuartoDAO(){
+    this.conn = ConnectionFactory.getConexao(); 
+}
 
 public boolean cadastrarQuarto(Quarto quarto) {
     String sql = "INSERT INTO quartos (numero, tipo, status) VALUES (?, ?, ?)";
 
-    try (Connection con = ConnectionFactory.getConexao();
-         PreparedStatement stmt = con.prepareStatement(sql)) {
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
         stmt.setString(1, quarto.getNumero());
         stmt.setString(2, quarto.getTipo());
@@ -30,31 +34,54 @@ public boolean cadastrarQuarto(Quarto quarto) {
 }
 
 
-    public List<Quarto> listarQuartosDisponiveis() throws SQLException {
-        List<Quarto> quartos = new ArrayList<>();
-        Connection con = ConnectionFactory.getConexao();
-        String sql = "SELECT * FROM quartos WHERE status = 'Disponível'";
-        PreparedStatement stmt = con.prepareStatement(sql);
-        ResultSet rs = stmt.executeQuery();
-        
-        
+        public List<Quarto> listarQuartosDisponiveis() {
+            List<Quarto> quartos = new ArrayList<>();
+            String sql = "SELECT * FROM quartos WHERE status = 'Disponível'";
 
-        while (rs.next()) {
-            Quarto q = new Quarto(
-                rs.getInt("id"),
-                rs.getString("numero"),
-                rs.getString("tipo"),
-                rs.getString("status")
+            try (PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
+
+                while (rs.next()) {
+                    Quarto q = new Quarto(
+                        rs.getInt("id"),
+                        rs.getString("numero"),
+                        rs.getString("tipo"),
+                        rs.getString("status")
             );
             quartos.add(q);
         }
-        con.close();
-        return quartos;
+
+            } catch (SQLException e) {
+            e.printStackTrace();
     }
+
+            return quartos;
+}
+        public List<Quarto> listarTodos() {
+            List<Quarto> quartos = new ArrayList<>();
+            String sql = "SELECT * FROM quartos";
+
+            try (PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
+
+                while (rs.next()) {
+                    Quarto q = new Quarto(
+                        rs.getInt("id"),
+                        rs.getString("numero"),
+                        rs.getString("tipo"),
+                        rs.getString("status")
+            );
+            quartos.add(q);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return quartos;
+}
+
         public Quarto buscarPorId(int id) throws SQLException {
         String sql = "SELECT * FROM quartos WHERE id = ?";
-        try (Connection con = ConnectionFactory.getConexao();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -71,10 +98,9 @@ public boolean cadastrarQuarto(Quarto quarto) {
     }
 
     // 2) Atualiza os dados (especialmente o status) de um quarto existente
-    public void atualizar(Quarto quarto) throws SQLException {
+    public void atualizarQuarto(Quarto quarto) throws SQLException {
         String sql = "UPDATE quartos SET numero = ?, tipo = ?, status = ? WHERE id = ?";
-        try (Connection con = ConnectionFactory.getConexao();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, quarto.getNumero());
             stmt.setString(2, quarto.getTipo());
             stmt.setString(3, quarto.getStatus());
@@ -82,4 +108,13 @@ public boolean cadastrarQuarto(Quarto quarto) {
             stmt.executeUpdate();
         }
     }
+    public void excluirQuarto(int id) throws SQLException {
+        String sql = "DELETE FROM Quarto WHERE id = ?";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        }
+    }
+    
 }
