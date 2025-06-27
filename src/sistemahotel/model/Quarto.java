@@ -55,6 +55,7 @@ public class Quarto {
         this.status = status;
     }
     
+    @Override
     public String toString() {
 
         return "Quarto " + this.getNumero() + " (" + this.getTipo() + ") - " + this.getStatus();

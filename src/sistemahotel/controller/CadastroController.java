@@ -5,6 +5,8 @@
 package sistemahotel.controller;
 
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import sistemahotel.dao.QuartoDAO;
 import sistemahotel.dao.HospedeDAO;
@@ -17,13 +19,14 @@ public class CadastroController {
     private final QuartoDAO quartoDAO = new QuartoDAO();
     private final HospedeDAO hospedeDAO = new HospedeDAO();
 
-    public boolean cadastrarQuarto(String numero, String tipo) {
-        if (numero == null || numero.isBlank() || tipo == null || tipo.isBlank()) {
+    
+    public boolean cadastrarQuarto(String numero, String tipo, String status) {
+        if (numero == null || numero.isBlank() || tipo == null || tipo.isBlank()|| status == null || status.isBlank()) {
             JOptionPane.showMessageDialog(null, "Número e tipo do quarto não podem estar vazios.");
             throw new IllegalArgumentException("Número e tipo do quarto não podem estar vazios.");
         }
 
-        Quarto quarto = new Quarto(0, numero.trim(), tipo.trim(), "Disponível");
+        Quarto quarto = new Quarto(0, numero.trim(), tipo.trim(), status.trim());
 
         return quartoDAO.cadastrarQuarto(quarto);
     }
@@ -43,13 +46,48 @@ public class CadastroController {
     }
 
     public void listarQuartosDisponiveis() {
-        try {
-            List<Quarto> quartos = quartoDAO.listarQuartosDisponiveis();
-            for (Quarto q : quartos) {
-                System.out.println("ID: " + q.getId() + ", Número: " + q.getNumero() + ", Tipo: " + q.getTipo());
-            }
-        } catch (SQLException e) {
-            System.err.println("Erro ao listar quartos: " + e.getMessage());
+        List<Quarto> quartos = quartoDAO.listarQuartosDisponiveis();
+        for (Quarto q : quartos) {
+            System.out.println("ID: " + q.getId() + ", Número: " + q.getNumero() + ", Tipo: " + q.getTipo());
         }
     }
+    public void listarHospedes() {
+    List<Hospede> hospedes = hospedeDAO.listarHospedes();
+    for (Hospede h : hospedes) {
+        System.out.println("ID: " + h.getId() + ", Nome: " + h.getNome() + ", CPF: " + h.getCpf());
+    }
 }
+
+    public List<Quarto> listarQuartos() {
+        return quartoDAO.listarTodos();
+    }
+    
+    public boolean excluirQuarto(int id) {
+        try {
+            quartoDAO.excluirQuarto(id);
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Erro no Controller ao excluir quarto: " + e.getMessage());
+            return false;
+        }
+    }
+     public Quarto buscarQuartoPorId(int id) {
+    try {
+        return quartoDAO.buscarPorId(id);
+    } catch (SQLException e) {
+        System.err.println("Erro no Controller ao buscar quarto por ID: " + e.getMessage());
+        return null; // Retorna null em caso de erro de banco de dados
+    }
+}
+      public boolean atualizarQuarto(Quarto qua) {
+        try {
+            quartoDAO.atualizarQuarto(qua);
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Erro no Controller ao atualizar quarto: " + e.getMessage());
+            return false;
+        }
+    }
+
+}
+
