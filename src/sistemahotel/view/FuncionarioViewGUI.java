@@ -17,11 +17,16 @@ public class FuncionarioViewGUI extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FuncionarioViewGUI.class.getName());
     private FuncionarioController funcionarioController;
+    private MenuViewGUI telaAnterior;
     /**
      * Creates new form FuncionarioViewGUI
      */
-    public FuncionarioViewGUI() {
+    public FuncionarioViewGUI(){
+        this(null);
+    }
+    public FuncionarioViewGUI(MenuViewGUI telaAnterior) {
         initComponents();
+        this.telaAnterior = telaAnterior;
         this.funcionarioController = new FuncionarioController();
         atualizarTabela();
         
@@ -42,6 +47,7 @@ public class FuncionarioViewGUI extends javax.swing.JFrame {
         tblFuncionarios = new javax.swing.JTable();
         btnAdicionar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
+        jbVoltar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -82,6 +88,13 @@ public class FuncionarioViewGUI extends javax.swing.JFrame {
             }
         });
 
+        jbVoltar.setText("Voltar");
+        jbVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbVoltarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -99,7 +112,9 @@ public class FuncionarioViewGUI extends javax.swing.JFrame {
                 .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(47, 47, 47)
                 .addComponent(btnExluir, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(301, 301, 301))
+                .addGap(101, 101, 101)
+                .addComponent(jbVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(103, 103, 103))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addContainerGap(653, Short.MAX_VALUE)
@@ -115,8 +130,9 @@ public class FuncionarioViewGUI extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnExluir, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
-                    .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jbVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnExluir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(14, 14, 14))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -126,6 +142,7 @@ public class FuncionarioViewGUI extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExluirActionPerformed
@@ -172,6 +189,14 @@ public class FuncionarioViewGUI extends javax.swing.JFrame {
         FuncionarioFormDialog form = new FuncionarioFormDialog(this, true, this.funcionarioController, funcParaEditar, this);
         form.setVisible(true);
     }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void jbVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbVoltarActionPerformed
+        this.dispose();
+           if (telaAnterior != null) {
+        telaAnterior.setVisible(true); // reabre a anterior
+    }
+            
+    }//GEN-LAST:event_jbVoltarActionPerformed
     
     public void atualizarTabela() {
     // Pega o "modelo" da sua JTable. É através do modelo que você manipula os dados.
@@ -228,6 +253,7 @@ public class FuncionarioViewGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnExluir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton jbVoltar;
     private javax.swing.JTable tblFuncionarios;
     // End of variables declaration//GEN-END:variables
 }
