@@ -127,7 +127,7 @@ public class MenuViewGUI extends javax.swing.JFrame {
         System.out.println("Chamando Reserva(Daniel)");
         System.out.println("A ser implementado");
         
-        ReservaView reservaView = new ReservaView();
+        ReservaViewGUI reservaView = new ReservaViewGUI();
         reservaView.setVisible(true);
         this.setVisible(false);
         
