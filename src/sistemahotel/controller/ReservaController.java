@@ -46,7 +46,7 @@ public class ReservaController {
         Quarto quarto = quartoDAO.buscarPorId(idQuarto);
         if (quarto != null) {
             quarto.setStatus("Ocupado");
-            quartoDAO.atualizar(quarto);
+            quartoDAO.atualizarQuarto(quarto);
         } else {
             throw new Exception("Quarto não encontrado.");
         }
