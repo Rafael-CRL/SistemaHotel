@@ -125,21 +125,21 @@ public class LoginViewGUI extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         AutenticaController authController = new AutenticaController();
-
         String cpf = txtCpf.getText();
         String senha = new String(txtSenha.getPassword());
 
         //retorna um objeto Funcionario
         Funcionario usuarioLogado = authController.autenticar(cpf, senha);
 
-        // Verifica se nao e nulho
+        // Verifica se nao e nulo
         if (usuarioLogado != null) {
-            // O objeto do usuario logado e passado para o construct do menuu
+            // Funcionario Logado é passado para o constructor do menu
             MenuViewGUI menu = new MenuViewGUI(usuarioLogado);
             menu.setVisible(true);
 
             this.dispose(); 
         } else {
+            // Se o objeto for nulo, a autenticação falhou.é
             JOptionPane.showMessageDialog(this, "CPF ou Senha inválidos.", "Erro de Login", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnLoginActionPerformed

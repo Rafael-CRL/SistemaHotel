@@ -1,7 +1,3 @@
-/*
- * Classe de modelo que representa um Funcionário no sistema,
- * correspondendo à tabela 'funcionarios' no banco de dados.
- */
 package sistemahotel.model;
 
 import java.math.BigDecimal;
