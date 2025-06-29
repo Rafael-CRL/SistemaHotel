@@ -57,8 +57,8 @@ public class Quarto {
     
     @Override
     public String toString() {
-
-        return "Quarto " + this.getNumero() + " (" + this.getTipo() + ") - " + this.getStatus();
+        // O JComboBox vai mostrar o número, tipo e status
+        return "Quarto " + this.getNumero() + " (" + this.getTipo() + ")";
     }
 
     

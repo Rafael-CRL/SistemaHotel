@@ -40,25 +40,42 @@ public class ReservaViewGUI extends javax.swing.JFrame {
         initComponents();
     }
     
-    private void carregarDadosIniciais(){
+    private void carregarDadosIniciais() {
         try {
+            System.out.println("--- DEBUG: Iniciando carregamento de dados para a tela de Reserva ---");
+
+            // Limpa os comboboxes
             cmbHospedes.removeAllItems();
             cmbQuartos.removeAllItems();
-            
+
+            // Carrega os hóspedes
             HospedeDAO hospedeDAO = new HospedeDAO();
-            List<Hospede> hospedes = hospedeDAO.listarHospedes(); 
+            List<Hospede> hospedes = hospedeDAO.listarHospedes();
+            // Teste 1: Quantos hóspedes o DAO realmente encontrou?
+            System.out.println("DEBUG: Hóspedes encontrados no banco: " + hospedes.size());
+
             for (Hospede h : hospedes) {
                 cmbHospedes.addItem(h);
             }
-            
+
+            // Carrega os quartos disponíveis
             QuartoDAO quartoDAO = new QuartoDAO();
             List<Quarto> quartos = quartoDAO.listarQuartosDisponiveis();
+            // Teste 2: Quantos quartos disponíveis o DAO encontrou?
+            System.out.println("DEBUG: Quartos disponíveis encontrados: " + quartos.size());
+
             for (Quarto q : quartos) {
                 cmbQuartos.addItem(q);
             }
+
+            System.out.println("DEBUG: Dados adicionados aos ComboBoxes com sucesso.");
+            System.out.println("--------------------------------------------------------------------");
+
         } catch (Exception e) {
+            // Se cair aqui, um erro grave aconteceu durante a busca no banco.
+            System.err.println("--- ERRO CRÍTICO em carregarDadosIniciais ---");
             JOptionPane.showMessageDialog(this, "Erro ao carregar dados iniciais: " + e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(); // Imprime o erro completo no console de saída
         }
     }
     @SuppressWarnings("unchecked")
@@ -238,9 +255,8 @@ public class ReservaViewGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnVoltarActionPerformed
-        dispose();
-        MenuViewGUI menuViewGUI = new MenuViewGUI();
-        menuViewGUI.setVisible(true);
+        this.dispose();
+        this.menuPai.setVisible(true);
     }//GEN-LAST:event_BtnVoltarActionPerformed
 
     private void BtnCriarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCriarReservaActionPerformed
