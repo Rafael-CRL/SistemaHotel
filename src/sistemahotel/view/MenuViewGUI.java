@@ -16,15 +16,12 @@ public class MenuViewGUI extends javax.swing.JFrame {
     private Funcionario usuarioLogado;
     /**
      * Creates new form MenuViewGUI
+     * @param usuario
      */
     public MenuViewGUI(Funcionario usuario) {
         initComponents();
         this.usuarioLogado = usuario; // Guarda o usuário que fez login
         configurarAcessos();
-    }
-
-    public MenuViewGUI() {
-        initComponents();
     }
 
     @SuppressWarnings("unchecked")
@@ -123,26 +120,23 @@ public class MenuViewGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnReservasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReservasActionPerformed
-        // TODO add your handling code here:
-        System.out.println("Chamando Reserva(Daniel)");
-        System.out.println("A ser implementado");
-        
-        ReservaViewGUI reservaView = new ReservaViewGUI();
-        reservaView.setVisible(true);
+ 
+        ReservaViewGUI telaReservas = new ReservaViewGUI(this, this.usuarioLogado);
+        telaReservas.setVisible(true);
         this.setVisible(false);
         
     }//GEN-LAST:event_btnReservasActionPerformed
     
     private void btnGestaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestaoActionPerformed
-        GestaoView gestaoView = new GestaoView(this);
-        gestaoView.setVisible(true);
+        GestaoView telaGestao = new GestaoView(this, this.usuarioLogado);
+        telaGestao.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnGestaoActionPerformed
 
     private void btnFinanceiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinanceiroActionPerformed
-            FinanceiroViewGUI fin = new FinanceiroViewGUI();
-            fin.setVisible(true);
-            this.setVisible(false);
+        FinanceiroViewGUI telaFinanceiro = new FinanceiroViewGUI(this, this.usuarioLogado);
+        telaFinanceiro.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_btnFinanceiroActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
@@ -151,8 +145,8 @@ public class MenuViewGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSairActionPerformed
 
     private void btnGerenciarFuncionariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarFuncionariosActionPerformed
-        // TODO add your handling code here:
         FuncionarioViewGUI telaFuncionarios = new FuncionarioViewGUI();
+        // Opcional: passar o menu pai se precisar voltar (new FuncionarioViewGUI(this);)
         telaFuncionarios.setVisible(true);
     }//GEN-LAST:event_btnGerenciarFuncionariosActionPerformed
   
@@ -164,30 +158,7 @@ public class MenuViewGUI extends javax.swing.JFrame {
             btnGerenciarFuncionarios.setVisible(false); // O botão fica invisível para outros cargos
         }
     }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new MenuViewGUI().setVisible(true));
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFinanceiro;

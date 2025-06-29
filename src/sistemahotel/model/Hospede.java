@@ -44,6 +44,12 @@ public class Hospede {
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
-
+    
+    @Override
+    public String toString() {
+        // O JComboBox vai mostrar o nome e o CPF do hóspede
+        return this.getNome() + " (" + this.getCpf() + ")";
+    }
+    
     
 }
