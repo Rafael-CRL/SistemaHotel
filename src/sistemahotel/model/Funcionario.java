@@ -3,50 +3,18 @@ package sistemahotel.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class Funcionario {
+public class Funcionario extends Pessoa{
 
-    private int id;
-    private String nome;
-    private String cpf;
     private String cargo;
     private LocalDate dataAdmissao;
     private BigDecimal salario;
     private String login;
     private String senha;
     private String status;
-    private String email;
-    private String telefone;
-
-    /**
+      /**
      * Construtor padrão.
      */
     public Funcionario() {
-    }
-
-    // --- Getters e Setters para todos os atributos ---
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
     }
 
     public String getCargo() {
@@ -97,19 +65,4 @@ public class Funcionario {
         this.status = status;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
 }
