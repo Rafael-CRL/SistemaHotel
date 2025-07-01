@@ -8,10 +8,7 @@ package sistemahotel.model;
  *
  * @author klayt
  */
-public class Hospede {
-    private int id;
-    private String nome;
-    private String cpf;
+public class Hospede extends Pessoa {
 
     public Hospede() {}
 
@@ -20,31 +17,7 @@ public class Hospede {
         this.nome = nome;
         this.cpf = cpf;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-    
+   
     @Override
     public String toString() {
         // O JComboBox vai mostrar o nome e o CPF do hóspede
