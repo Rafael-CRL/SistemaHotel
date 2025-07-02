@@ -12,7 +12,7 @@ import javax.swing.*;
 
 public class NumeroPessoasDialog extends JDialog {
     private JComboBox<Integer> comboPessoas;
-    private JButton btnConfirmar;
+    private final JButton btnConfirmar;
     private int numeroSelecionado;
     
     public NumeroPessoasDialog(javax.swing.JFrame parent){
