@@ -13,6 +13,7 @@ public class Reserva {
     private LocalDate dataSaida;   
     private BigDecimal valorTotal; 
     private String status;
+    private int numeroPessoas;
 
 
     public Reserva() {
@@ -27,19 +28,73 @@ public class Reserva {
         this.status = status;
     }
 
+    public int getId() {
+        return id;
+    }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public int getIdQuarto() { return idQuarto; }
-    public void setIdQuarto(int idQuarto) { this.idQuarto = idQuarto; }
-    public int getIdHospede() { return idHospede; }
-    public void setIdHospede(int idHospede) { this.idHospede = idHospede; }
-    public LocalDate getDataEntrada() { return dataEntrada; }
-    public void setDataEntrada(LocalDate dataEntrada) { this.dataEntrada = dataEntrada; }
-    public LocalDate getDataSaida() { return dataSaida; }
-    public void setDataSaida(LocalDate dataSaida) { this.dataSaida = dataSaida; }
-    public BigDecimal getValorTotal() { return valorTotal; }
-    public void setValorTotal(BigDecimal valorTotal) { this.valorTotal = valorTotal; }
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getIdQuarto() {
+        return idQuarto;
+    }
+
+    public void setIdQuarto(int idQuarto) {
+        this.idQuarto = idQuarto;
+    }
+
+    public int getIdHospede() {
+        return idHospede;
+    }
+
+    public void setIdHospede(int idHospede) {
+        this.idHospede = idHospede;
+    }
+
+    public LocalDate getDataEntrada() {
+        return dataEntrada;
+    }
+
+    public void setDataEntrada(LocalDate dataEntrada) {
+        this.dataEntrada = dataEntrada;
+    }
+
+    public LocalDate getDataSaida() {
+        return dataSaida;
+    }
+
+    public void setDataSaida(LocalDate dataSaida) {
+        this.dataSaida = dataSaida;
+    }
+
+    public BigDecimal getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(BigDecimal valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getNumeroPessoas() {
+        return numeroPessoas;
+    }
+
+    public void setNumeroPessoas(int numeroPessoas) {
+        if(numeroPessoas < 1 || numeroPessoas > 4){
+            throw new IllegalArgumentException("Número de pessoas em um quarto deve ser entre 1 e 4");
+        }
+        this.numeroPessoas = numeroPessoas;
+    }
+
+
+    
 }
