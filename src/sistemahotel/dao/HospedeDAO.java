@@ -52,5 +52,29 @@ public class HospedeDAO {
 
         return hospedes;
     }
+      
+    public Hospede buscarPorCPF(String cpf) throws SQLException {
+        // Agora busca na tabela 'hospedes' e carrega todos os campos:
+        String sql = "SELECT * FROM hospedes WHERE cpf = ?";
+        
+        try(PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, cpf);
+            
+            try(ResultSet rs = stmt.executeQuery()){
+                if(rs.next()){
+                    Hospede hospede = new Hospede();
+                    hospede.setId(rs.getInt("id"));
+                    hospede.setNome(rs.getString("nome"));
+                    hospede.setCpf(rs.getString("cpf"));
+                    
+                    return hospede;
+                }
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    } 
+ 
 }
 

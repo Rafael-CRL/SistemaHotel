@@ -5,13 +5,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.JOptionPane;
+import sistemahotel.controller.HospedeController;
 import sistemahotel.controller.ReservaController;
 import sistemahotel.dao.HospedeDAO;
 import sistemahotel.dao.QuartoDAO;
 import sistemahotel.model.Funcionario;
 import sistemahotel.model.Hospede;
 import sistemahotel.model.Quarto;
-import sistemahotel.view.MenuViewGUI;
+
 
 /**
  *
@@ -23,6 +24,8 @@ public class ReservaViewGUI extends javax.swing.JFrame {
     private ReservaController reservaController;
     private Funcionario usuarioLogado;
     private MenuViewGUI menuPai;
+    private javax.swing.JButton btnBuscarCPF;
+    private javax.swing.JTextField txtCPFBusca;
 
     public ReservaViewGUI(MenuViewGUI menuPai, Funcionario usuarioLogado) {
         initComponents();
@@ -96,6 +99,9 @@ public class ReservaViewGUI extends javax.swing.JFrame {
         cmbHospedes = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        TxtCPF = new javax.swing.JTextField();
+        BtnBuscarCPF = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -205,12 +211,32 @@ public class ReservaViewGUI extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         jLabel6.setText("Quarto");
 
+        TxtCPF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TxtCPFActionPerformed(evt);
+            }
+        });
+
+        BtnBuscarCPF.setText("Buscar CPF");
+        BtnBuscarCPF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnBuscarCPFActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Buscar cliente por CPF:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(BtnBuscarCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TxtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -244,8 +270,17 @@ public class ReservaViewGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cmbQuartos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(15, 15, 15)
+                        .addComponent(TxtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(BtnBuscarCPF)
+                        .addGap(41, 41, 41)))
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -320,25 +355,83 @@ public class ReservaViewGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnCheckOutActionPerformed
 
     private void BtnCheckINActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCheckINActionPerformed
-        String idReservaStr = JOptionPane.showInputDialog(this, "Digite o ID da Reserva para fazer o Check-in:", "Realizar Check-in", JOptionPane.PLAIN_MESSAGE);
+        try{
+            // 1. Pede o ID da reserva
+            String idReservaStr = JOptionPane.showInputDialog(this, "Digite o ID da Reserva:");
+            if (idReservaStr == null || idReservaStr.trim().isEmpty()) return;
+            
+            // 2. Abre o diálogo para selecionar número de pessoas
+            NumeroPessoasDialog dialog = new NumeroPessoasDialog(this);
+            dialog.setVisible(true);
+            int numPessoas = dialog.getNumeroSelecionado();
+            
+            // 3. Executa o check-in
+            boolean sucesso = reservaController.realizarCheckIn(
+            Integer.parseInt(idReservaStr),
+            numPessoas
+            );
+            
+            // 4. Feedback ao usuário
+            if (sucesso) {
+                JOptionPane.showMessageDialog(this, 
+                    "Check-in realizado para " + numPessoas + " pessoa(s)!", 
+                    "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Falha no check-in. Verifique o ID ou status da reserva.", 
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        }catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Erro: " + e.getMessage(), 
+            "Erro", JOptionPane.ERROR_MESSAGE);
+          }                                    
+    }//GEN-LAST:event_BtnCheckINActionPerformed
 
-        if (idReservaStr == null || idReservaStr.trim().isEmpty()) {
+    private void TxtCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtCPFActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_TxtCPFActionPerformed
+
+    private void BtnBuscarCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarCPFActionPerformed
+        // 1. Obter o CPF digitado (removendo formatação se necessário):
+        String cpfDigitado = txtCPFBusca.getText().replaceAll("[^0-9]", "");
+        
+        // 2. Validar o CPF:
+        if(cpfDigitado.length() != 11){
+            JOptionPane.showMessageDialog(this,
+                    "CPF inválido! Deve conter 11 dígitos.",
+                    "Erro", JOptionPane.ERROR_MESSAGE );
             return;
         }
-
-        try {
-            int idReserva = Integer.parseInt(idReservaStr);
-            boolean sucesso = reservaController.realizarCheckIn(idReserva);
-            
-            if (sucesso) {
-                JOptionPane.showMessageDialog(this, "Check-in realizado com sucesso para a reserva ID: " + idReserva, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this, "Não foi possível fazer o check-in.\nVerifique se a reserva existe e está com o status 'Pendente'.", "Falha no Check-in", JOptionPane.WARNING_MESSAGE);
+        
+        // 3. Buscar o hóspede usando o Controller:
+        HospedeController controller = new HospedeController();
+        Hospede hospedeEncontrado = controller.buscarPorCPF(cpfDigitado);
+        
+        // 4. Tratar o resultado da busca:
+        if (hospedeEncontrado != null){
+            // Procura o hóspede no JComboBox existente:
+            for(int i = 0; i < cmbHospedes.getItemCount(); i++){
+                Hospede h = cmbHospedes.getItemAt(i);
+                if(h.getCpf().equals(cpfDigitado)){
+                    cmbHospedes.setSelectedIndex(i);
+                    JOptionPane.showMessageDialog(this, 
+                            "Hóspede encontrado: " + h.getNome(),
+                            "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao fazer check-in: " + e.getMessage());
-        }                                       
-    }//GEN-LAST:event_BtnCheckINActionPerformed
+            // Caso o hóspede não esteja no ComboBox (mas foi encontrado no banco):
+            JOptionPane.showMessageDialog(this, 
+                    "Hóspede encontrado, mas não está na lista atual",
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
+        } else{
+            JOptionPane.showMessageDialog(this, 
+                    "Nenhum hóspede encontrado com o CPF: " + cpfDigitado,
+                    "Não encontrado", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_BtnBuscarCPFActionPerformed
 
     /**
      * @param args the command line arguments
@@ -366,12 +459,15 @@ public class ReservaViewGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnBuscarCPF;
     private javax.swing.JButton BtnCheckIN;
     private javax.swing.JButton BtnCheckOut;
     private javax.swing.JButton BtnCriarReserva;
     private javax.swing.JButton BtnVoltar;
+    private javax.swing.JTextField TxtCPF;
     private javax.swing.JComboBox<Hospede> cmbHospedes;
     private javax.swing.JComboBox<Quarto> cmbQuartos;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

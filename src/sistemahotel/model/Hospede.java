@@ -8,7 +8,7 @@ package sistemahotel.model;
  *
  * @author klayt
  */
-public class Hospede {
+public class Hospede extends Funcionario {
     private int id;
     private String nome;
     private String cpf;
@@ -21,26 +21,32 @@ public class Hospede {
         this.cpf = cpf;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }
 
+    @Override
     public String getNome() {
         return nome;
     }
 
+    @Override
     public void setNome(String nome) {
         this.nome = nome;
     }
 
+    @Override
     public String getCpf() {
         return cpf;
     }
 
+    @Override
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }

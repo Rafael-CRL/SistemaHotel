@@ -68,15 +68,18 @@ public class ReservaDAO {
     }
     
     // Atualiza apenas os campos que mudam durante a operação (status, valor).
-    public void atualizar(Reserva reserva) throws SQLException {
-        String sql = "UPDATE reservas SET status = ?, valor_total = ? WHERE id = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, reserva.getStatus());
-            stmt.setBigDecimal(2, reserva.getValorTotal());
-            stmt.setInt(3, reserva.getId());
-            stmt.executeUpdate();
-        }
+   public boolean atualizar(Reserva reserva) throws SQLException {
+    String sql = "UPDATE reservas SET status = ?, valor_total = ?, numero_pessoas = ? WHERE id = ?";
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, reserva.getStatus());
+        stmt.setBigDecimal(2, reserva.getValorTotal());
+        stmt.setInt(3, reserva.getNumeroPessoas());
+        stmt.setInt(4, reserva.getId());
+        
+        int linhasAfetadas = stmt.executeUpdate();
+        return linhasAfetadas > 0; // Retorna true se pelo menos 1 linha foi atualizada
     }
+}
     
     // Método auxiliar para mapear uma linha do ResultSet para um objeto Reserva.
     // Isso evita a repetição de código.
