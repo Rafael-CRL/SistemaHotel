@@ -20,7 +20,8 @@ public class PagamentoFuncionario extends Funcionario{
 
     public PagamentoFuncionario(){}
     
-    public PagamentoFuncionario(BigDecimal salario, String cargo, BigDecimal valorPago, Date dataPagamento, String descricao, String formaDePagamento) {
+    public PagamentoFuncionario(BigDecimal salario, String cargo,
+            BigDecimal valorPago, Date dataPagamento, String descricao, String formaDePagamento) {
         this.salario = salario;
         this.cargo = cargo;
         this.valorPago = valorPago;

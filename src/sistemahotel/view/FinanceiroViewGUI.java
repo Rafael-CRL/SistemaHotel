@@ -37,6 +37,7 @@ public class FinanceiroViewGUI extends javax.swing.JFrame {
     
     public FinanceiroViewGUI(MenuViewGUI menuPai, Funcionario usuarioLogado) {
     initComponents();
+    this.setLocationRelativeTo(null);
     this.menuPai = menuPai;
     this.usuarioLogado = usuarioLogado;
     this.finController = new FinanceiroController();

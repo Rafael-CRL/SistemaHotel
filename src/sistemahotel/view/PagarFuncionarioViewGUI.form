@@ -298,11 +298,12 @@
     <Component class="javax.swing.JComboBox" name="CBXFormaDePagamento">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Dinheiro"/>
-            <StringItem index="1" value="Pix"/>
-            <StringItem index="2" value="Boleto"/>
-            <StringItem index="3" value="Transfer&#xea;ncia"/>
+          <StringArray count="5">
+            <StringItem index="0" value="Form. D. Pagamento"/>
+            <StringItem index="1" value="Dinheiro"/>
+            <StringItem index="2" value="Pix"/>
+            <StringItem index="3" value="Boleto"/>
+            <StringItem index="4" value="Transfer&#xea;ncia"/>
           </StringArray>
         </Property>
       </Properties>
