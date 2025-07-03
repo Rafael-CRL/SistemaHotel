@@ -14,7 +14,7 @@ public class PagarFuncionarioController {
         return dao.buscarFuncionarioPorNome(nome);
     }
 
-    // Registrar pagamento
+    //egistrar pagamento
     public void registrarPagamento(PagamentoFuncionario pagamento) {
         if (pagamento.getValorPago() == null || pagamento.getValorPago().doubleValue() <= 0) {
             JOptionPane.showMessageDialog(null, "O valor do pagamento deve ser maior que zero.");

@@ -3,6 +3,7 @@ package sistemahotel.dao;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import sistemahotel.model.Transacao;
@@ -15,13 +16,38 @@ public class FinanceiroDAO {
         this.conn = ConnectionFactory.getConexao();
     }
 
-    // ✅ Buscar todas as transações com nome da pessoa relacionada
+    //Inserir nova transação
+    public void inserirTransacao(Transacao t) throws SQLException {
+        String sql = """
+            INSERT INTO transacoes (tipo, valor, data_transacao, forma_pagamento, categoria, descricao, id_hospede, id_funcionario)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, t.getTipo());
+            stmt.setBigDecimal(2, t.getValor());
+            stmt.setTimestamp(3, Timestamp.valueOf(t.getDataTransacao()));
+            stmt.setString(4, t.getFormaPagamento());
+            stmt.setString(5, t.getCategoria());
+            stmt.setString(6, t.getDescricao());
+            stmt.setObject(7, t.getIdHospede()); 
+            stmt.setObject(8, t.getIdFuncionario()); 
+            stmt.executeUpdate();
+        }
+    }
+
+    // Buscar todas as transações com nome da pessoa relacionada
     public List<Transacao> buscarTodasTransacoes() throws SQLException {
         List<Transacao> transacoes = new ArrayList<>();
 
         String sql = """
-            SELECT t.id, t.tipo, t.valor, t.data_transacao, t.forma_pagamento,
-                   t.categoria, t.descricao,
+            SELECT t.id,
+                   t.tipo, 
+                   t.valor, 
+                   t.data_transacao, 
+                   t.forma_pagamento,
+                   t.categoria, 
+                   t.descricao,
                    COALESCE(f.nome, h.nome) AS nome_pessoa
             FROM transacoes t
             LEFT JOIN funcionarios f ON t.id_funcionario = f.id
@@ -50,13 +76,19 @@ public class FinanceiroDAO {
         return transacoes;
     }
 
-    // ✅ Buscar transações com filtros dinâmicos
-    public List<Transacao> buscarTransacoesFiltradas(LocalDate dataInicio, LocalDate dataFim, String tipo, String categoria) throws SQLException {
+    // Buscar transações com filtros dinâmicos
+    public List<Transacao> buscarTransacoesFiltradas(LocalDate dataInicio,
+            LocalDate dataFim, String tipo, String categoria) throws SQLException {
         List<Transacao> transacoes = new ArrayList<>();
 
         StringBuilder sql = new StringBuilder("""
-            SELECT t.id, t.tipo, t.valor, t.data_transacao, t.forma_pagamento,
-                   t.categoria, t.descricao,
+            SELECT t.id, 
+                   t.tipo, 
+                   t.valor, 
+                   t.data_transacao, 
+                   t.forma_pagamento,
+                   t.categoria, 
+                   t.descricao,
                    COALESCE(f.nome, h.nome) AS nome_pessoa
             FROM transacoes t
             LEFT JOIN funcionarios f ON t.id_funcionario = f.id

@@ -29,7 +29,7 @@ public class PagarFuncionarioDAO {
     return nomes;
 }
     
-    //  Buscar dados do funcionário pelo nome
+    //Buscar dados do funcionário pelo nome
     public Optional<PagamentoFuncionario> buscarFuncionarioPorNome(String nome) {
         String sql = "SELECT id, cargo, salario FROM funcionarios WHERE nome = ?";
 
@@ -55,9 +55,10 @@ public class PagarFuncionarioDAO {
         return Optional.empty();
     }
 
-    // 💾 Registrar pagamento na tabela Transacoes
+    //Registrar pagamento na tabela Transacoes
     public void registrarPagamento(PagamentoFuncionario pagamento) {
-    String sql = "INSERT INTO transacoes (tipo, valor, data_transacao, forma_pagamento, categoria, descricao, id_funcionario) " +
+    String sql = "INSERT INTO transacoes (tipo, valor, data_transacao, "
+            + "forma_pagamento, categoria, descricao, id_funcionario) " +
                  "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
     try (Connection conn = ConnectionFactory.getConexao();

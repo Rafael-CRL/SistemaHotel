@@ -144,7 +144,7 @@ public class PagarFuncionarioViewGUI extends javax.swing.JFrame {
 
         jLabel9.setText("Forma:");
 
-        CBXFormaDePagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dinheiro", "Pix", "Boleto", "Transferência" }));
+        CBXFormaDePagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Form. D. Pagamento", "Dinheiro", "Pix", "Boleto", "Transferência" }));
 
         BTLimpar.setText("Limpar");
         BTLimpar.addActionListener(new java.awt.event.ActionListener() {
@@ -318,13 +318,13 @@ public class PagarFuncionarioViewGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_BTNEditarActionPerformed
 
     private void BTLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTLimparActionPerformed
-        CBNomeFuncionario.setSelectedIndex(-1); // limpa seleção
+        CBNomeFuncionario.setSelectedIndex(0);
         TxtIDDoFuncionario.setText("");
         TXTCargoDoFuncionario.setText("");
         SalarioDoFuncionario.setText("");
         TXTValorSerPago.setText("");
         TXTADescricao.setText("");
-        CBXFormaDePagamento.setSelectedIndex(-1); // limpa seleção
+        CBXFormaDePagamento.setSelectedIndex(0);
         DataDoPagamento.setDate(null);
 
     }//GEN-LAST:event_BTLimparActionPerformed

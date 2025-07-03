@@ -14,15 +14,33 @@ import java.time.LocalDateTime;
 public class Transacao extends PagamentoFuncionario{
 
     private int id;
-    private int idReserva; // Corrigido para o padrão camelCase
-    private BigDecimal valor; // Corrigido para BigDecimal, ideal para valores monetários
+    private int idReserva;
+    private BigDecimal valor;
     private String tipo;
-    private LocalDateTime dataTransacao; // Corrigido para a API moderna de Data/Hora do Java
+    private LocalDateTime dataTransacao;
     private String status;
     private String formaPagamento;
     private String descricao;
     private String nomeRelacionado;
     private String categoria;
+    private Integer idHospede;
+    private Integer idFuncionario;
+
+    public Integer getIdFuncionario() {
+        return idFuncionario;
+    }
+
+    public void setIdFuncionario(Integer idFuncionario) {
+        this.idFuncionario = idFuncionario;
+    }
+
+    public Integer getIdHospede() {
+        return idHospede;
+    }
+
+    public void setIdHospede(Integer idHospede) {
+        this.idHospede = idHospede;
+    }
 
     public String getCategoria() {
         return categoria;

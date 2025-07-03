@@ -4,6 +4,8 @@
  */
 package sistemahotel.dao;
 
+import sistemahotel.model.Transacao;
+import sistemahotel.dao.FinanceiroDAO;
 import sistemahotel.model.Reserva;
 import java.math.BigDecimal;
 import java.sql.*;
@@ -21,26 +23,29 @@ public class ReservaDAO {
     }
 
     public void criarReserva(Reserva reserva) throws SQLException {
-        String sql = "INSERT INTO reservas (id_quarto, id_hospede, data_entrada, data_saida, valor_total, status) VALUES (?, ?, ?, ?, ?, ?)";
-        
-        try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setInt(1, reserva.getIdQuarto());
-            stmt.setInt(2, reserva.getIdHospede());
-            // Converte o LocalDate moderno para o java.sql.Date que o JDBC espera.
-            stmt.setDate(3, Date.valueOf(reserva.getDataEntrada()));
-            stmt.setDate(4, Date.valueOf(reserva.getDataSaida()));
-            // Usa setBigDecimal para valores monetários, garantindo a precisão.
-            stmt.setBigDecimal(5, reserva.getValorTotal());
-            stmt.setString(6, reserva.getStatus());
-            stmt.executeUpdate();
-            
-            try (ResultSet rs = stmt.getGeneratedKeys()) {
-                if (rs.next()) {
-                    reserva.setId(rs.getInt(1));
-                }
+    // Verificação de segurança: garantir que o valor total não seja nulo
+    if (reserva.getValorTotal() == null) {
+        throw new SQLException("Valor da reserva está nulo. Defina o valor total antes de salvar.");
+    }
+
+    String sql = "INSERT INTO reservas (id_quarto, id_hospede, data_entrada, data_saida, valor_total, status) VALUES (?, ?, ?, ?, ?, ?)";
+
+    try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        stmt.setInt(1, reserva.getIdQuarto());
+        stmt.setInt(2, reserva.getIdHospede());
+        stmt.setDate(3, Date.valueOf(reserva.getDataEntrada()));
+        stmt.setDate(4, Date.valueOf(reserva.getDataSaida()));
+        stmt.setBigDecimal(5, reserva.getValorTotal());
+        stmt.setString(6, reserva.getStatus());
+        stmt.executeUpdate();
+
+        try (ResultSet rs = stmt.getGeneratedKeys()) {
+            if (rs.next()) {
+                reserva.setId(rs.getInt(1));
             }
         }
     }
+}
 
     public Reserva buscarPorId(int id) throws SQLException {
         String sql = "SELECT * FROM reservas WHERE id = ?";
