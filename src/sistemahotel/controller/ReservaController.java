@@ -13,6 +13,8 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import sistemahotel.dao.FinanceiroDAO;
+import sistemahotel.model.Transacao;
 
 /**
  * Controller responsável pela lógica de negócio das reservas.
@@ -106,6 +108,20 @@ public class ReservaController {
              reserva.setValorTotal(valorTotal);
              reserva.setStatus("Finalizada");
              reservaDAO.atualizar(reserva);
+             
+             
+            // Criar e registrar a transação financeira correspondente à reserva
+            Transacao transacao = new Transacao();
+            transacao.setTipo("Entrada");
+            transacao.setValor(reserva.getValorTotal());
+            transacao.setDataTransacao(java.time.LocalDateTime.now());
+            transacao.setFormaPagamento("Reserva"); // ou use um campo real se houver
+            transacao.setCategoria("Reserva");
+            transacao.setDescricao("Reserva do hóspede ID " + reserva.getIdHospede());
+            transacao.setIdHospede(reserva.getIdHospede());
+
+            FinanceiroDAO financeiroDAO = new FinanceiroDAO();
+            financeiroDAO.inserirTransacao(transacao);
 
              // Libera o quarto, mudando seu status para "Disponível".
              Quarto quarto = quartoDAO.buscarPorId(reserva.getIdQuarto());
