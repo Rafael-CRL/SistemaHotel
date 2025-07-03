@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.JOptionPane;
+import sistemahotel.controller.HospedeController;
 import sistemahotel.controller.ReservaController;
 import sistemahotel.dao.HospedeDAO;
 import sistemahotel.dao.QuartoDAO;
@@ -82,6 +83,7 @@ public class ReservaViewGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTextField1 = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -96,6 +98,16 @@ public class ReservaViewGUI extends javax.swing.JFrame {
         cmbHospedes = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        TxtCPF = new javax.swing.JTextField();
+        BtnBuscarCPF = new javax.swing.JButton();
+
+        jTextField1.setText("jTextField1");
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -205,13 +217,25 @@ public class ReservaViewGUI extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         jLabel6.setText("Quarto");
 
+        jLabel1.setText("    Buscar hóspede por CPF");
+
+        TxtCPF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TxtCPFActionPerformed(evt);
+            }
+        });
+
+        BtnBuscarCPF.setText("Buscar CPF");
+        BtnBuscarCPF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnBuscarCPFActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -228,6 +252,20 @@ public class ReservaViewGUI extends javax.swing.JFrame {
                             .addComponent(jLabel6))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(BtnBuscarCPF))
+                            .addComponent(TxtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -244,7 +282,15 @@ public class ReservaViewGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cmbQuartos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(TxtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(BtnBuscarCPF)))
                 .addGap(29, 29, 29)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -320,25 +366,94 @@ public class ReservaViewGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnCheckOutActionPerformed
 
     private void BtnCheckINActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCheckINActionPerformed
-        String idReservaStr = JOptionPane.showInputDialog(this, "Digite o ID da Reserva para fazer o Check-in:", "Realizar Check-in", JOptionPane.PLAIN_MESSAGE);
+        String idReservaStr = JOptionPane.showInputDialog(this, 
+        "Digite o ID da Reserva para fazer o Check-in:", 
+        "Realizar Check-in", 
+        JOptionPane.PLAIN_MESSAGE);
 
         if (idReservaStr == null || idReservaStr.trim().isEmpty()) {
             return;
         }
 
         try {
+            // 1. Abrir diálogo para seleção do número de pessoas
+            NumeroPessoasDialog dialog = new NumeroPessoasDialog(this);
+            dialog.setVisible(true);
+            int numeroPessoas = dialog.getNumeroSelecionado();
+
+            // 2. Converter ID para inteiro
             int idReserva = Integer.parseInt(idReservaStr);
-            boolean sucesso = reservaController.realizarCheckIn(idReserva);
-            
+
+            // 3. Chamar o método CORRETO com 2 parâmetros
+            boolean sucesso = reservaController.realizarCheckIn(idReserva, numeroPessoas);
+
             if (sucesso) {
-                JOptionPane.showMessageDialog(this, "Check-in realizado com sucesso para a reserva ID: " + idReserva, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, 
+                    """
+                    Check-in realizado com sucesso!
+                    ID Reserva: """ + idReserva + "\n" +
+                    "Número de pessoas: " + numeroPessoas, 
+                    "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(this, "Não foi possível fazer o check-in.\nVerifique se a reserva existe e está com o status 'Pendente'.", "Falha no Check-in", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, """
+                                                    Não foi possivel fazer o check-in.
+                                                    Verifique se a reserva existe e está com status 'Pendente'.""", 
+                    "Falha no Check-in", JOptionPane.WARNING_MESSAGE);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao fazer check-in: " + e.getMessage());
-        }                                       
+            JOptionPane.showMessageDialog(this, 
+                "Erro ao fazer check-in: " + e.getMessage(), 
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }                                          
     }//GEN-LAST:event_BtnCheckINActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void TxtCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtCPFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TxtCPFActionPerformed
+
+    private void BtnBuscarCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarCPFActionPerformed
+        // 1. Obter o CPF digitado (removendo formatação se necessário):
+        String cpfDigitado = TxtCPF.getText().replaceAll("[^0-9]", "");
+        
+        // 2. Validar o CPF:
+        if(cpfDigitado.length() != 11){
+            JOptionPane.showMessageDialog(this,
+                    "CPF inválido! Deve conter 11 dígitos.",
+                    "Erro", JOptionPane.ERROR_MESSAGE );
+            return;
+        }
+        
+        // 3. Buscar o hóspede usando o Controller:
+        HospedeController controller = new HospedeController();
+        Hospede hospedeEncontrado = controller.buscarPorCPF(cpfDigitado);
+        
+        // 4. Tratar o resultado da busca:
+        if (hospedeEncontrado != null){
+            // Procura o hóspede no JComboBox existente:
+            for(int i = 0; i < cmbHospedes.getItemCount(); i++){
+                Hospede h = cmbHospedes.getItemAt(i);
+                if(h.getCpf().equals(cpfDigitado)){
+                    cmbHospedes.setSelectedIndex(i);
+                    JOptionPane.showMessageDialog(this, 
+                            "Hóspede encontrado: " + h.getNome(),
+                            "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+            }
+            // Caso o hóspede não esteja no ComboBox (mas foi encontrado no banco):
+            JOptionPane.showMessageDialog(this, 
+                    "Hóspede encontrado, mas não está na lista atual",
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
+        } else{
+            JOptionPane.showMessageDialog(this, 
+                    "Nenhum hóspede encontrado com o CPF: " + cpfDigitado,
+                    "Não encontrado", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_BtnBuscarCPFActionPerformed
 
     /**
      * @param args the command line arguments
@@ -366,18 +481,22 @@ public class ReservaViewGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnBuscarCPF;
     private javax.swing.JButton BtnCheckIN;
     private javax.swing.JButton BtnCheckOut;
     private javax.swing.JButton BtnCriarReserva;
     private javax.swing.JButton BtnVoltar;
+    private javax.swing.JTextField TxtCPF;
     private javax.swing.JComboBox<Hospede> cmbHospedes;
     private javax.swing.JComboBox<Quarto> cmbQuartos;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField txtDataEntrada;
     private javax.swing.JTextField txtDataSaida;
     // End of variables declaration//GEN-END:variables

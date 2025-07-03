@@ -17,13 +17,15 @@ public QuartoDAO(){
 }
 
 public boolean cadastrarQuarto(Quarto quarto) {
-    String sql = "INSERT INTO quartos (numero, tipo, status) VALUES (?, ?, ?)";
+    String sql = "INSERT INTO quartos (numero, tipo, status, capacidade, preco_diaria) VALUES (?, ?, ?, ?, ?)";
 
     try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
         stmt.setString(1, quarto.getNumero());
         stmt.setString(2, quarto.getTipo());
         stmt.setString(3, quarto.getStatus());
+        stmt.setInt(4, quarto.getCapacidade());
+        stmt.setBigDecimal(5, quarto.getPrecoDiaria());
         stmt.executeUpdate();
         return true;
 
@@ -46,7 +48,9 @@ public boolean cadastrarQuarto(Quarto quarto) {
                         rs.getInt("id"),
                         rs.getString("numero"),
                         rs.getString("tipo"),
-                        rs.getString("status")
+                        rs.getString("status"),
+                        rs.getInt("capacidade"),
+                        rs.getBigDecimal("preco_diaria")
             );
             quartos.add(q);
         }
@@ -69,7 +73,9 @@ public boolean cadastrarQuarto(Quarto quarto) {
                         rs.getInt("id"),
                         rs.getString("numero"),
                         rs.getString("tipo"),
-                        rs.getString("status")
+                        rs.getString("status"),
+                        rs.getInt("capacidade"),
+                        rs.getBigDecimal("preco_diaria")
             );
             quartos.add(q);
         }
@@ -89,7 +95,9 @@ public boolean cadastrarQuarto(Quarto quarto) {
                         rs.getInt("id"),
                         rs.getString("numero"),
                         rs.getString("tipo"),
-                        rs.getString("status")
+                        rs.getString("status"),
+                        rs.getInt("capacidade"),
+                        rs.getBigDecimal("preco_diaria")
                     );
                 }
             }
