@@ -3,36 +3,47 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package sistemahotel.view;
-
+import java.util.List;
 import java.math.BigDecimal;
-import javax.swing.JOptionPane;
-import sistemahotel.controller.FinanceiroController;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import sistemahotel.controller.FinanceiroController;
+import sistemahotel.dao.FuncionarioDAO;
 import sistemahotel.model.Funcionario;
-
+import sistemahotel.model.Transacao;
+import sistemahotel.view.MenuViewGUI;
 /**
  *
  * @author Ray Carvalho
  */
 public class FinanceiroViewGUI extends javax.swing.JFrame {
-
+    
+   private MenuViewGUI menuPai;
+   private FinanceiroController finController;
+   private Funcionario usuarioLogado;
+   private MenuViewGUI menuViewGUI;
+    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FinanceiroViewGUI.class.getName());
-    private FinanceiroController financeiroController;
-    private Funcionario usuarioLogado;
-    private MenuViewGUI menuPai;
-
     /**
      * Creates new form FinanceiroViewGUI
      */
-    public FinanceiroViewGUI(MenuViewGUI menuPai, Funcionario usuarioLogado) {
-        initComponents();
-        this.setLocationRelativeTo(menuPai); // Centraliza a tela em relação ao menu
 
-        this.financeiroController = new FinanceiroController();
-        this.usuarioLogado = usuarioLogado; // Guarda o usuário logado
-        this.menuPai = menuPai; // Guarda a referência da tela de menu
+    public FinanceiroViewGUI() {
+ 
     }
+    
+    public FinanceiroViewGUI(MenuViewGUI menuPai, Funcionario usuarioLogado) {
+    initComponents();
+    this.setLocationRelativeTo(null);
+    this.menuPai = menuPai;
+    this.usuarioLogado = usuarioLogado;
+    this.finController = new FinanceiroController();
+    atualizarTabela();
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -44,307 +55,426 @@ public class FinanceiroViewGUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        TxtIDReserva = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        TxtValor = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        TxtData = new javax.swing.JTextField();
-        CBXTipo = new javax.swing.JComboBox<>();
-        BTNRegistrarPagamento = new javax.swing.JButton();
-        BTNSaldoDoDia = new javax.swing.JButton();
-        BTNEmitirRecibo = new javax.swing.JButton();
-        BTNLimpar = new javax.swing.JButton();
-        BTNExPDF = new javax.swing.JButton();
-        BTNExCVS = new javax.swing.JButton();
-        BTNVoltar = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
+        Datainicial = new com.toedter.calendar.JDateChooser();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Tabela = new javax.swing.JTable();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabel3 = new javax.swing.JLabel();
+        CBXTipo = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        CBXCategoria = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        DataFinal = new com.toedter.calendar.JDateChooser();
+        BTFiltro = new javax.swing.JButton();
+        BTLimpar = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
+        jSeparator3 = new javax.swing.JSeparator();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        BTPagarFuncionario = new javax.swing.JButton();
+        BTGerarRelatorio = new javax.swing.JButton();
+        BTFecha = new javax.swing.JButton();
+        jSeparator4 = new javax.swing.JSeparator();
+        BTVoltar = new javax.swing.JButton();
+        TxtTotalEntrada = new javax.swing.JTextField();
+        TxtTotalDeSaida = new javax.swing.JTextField();
+        TxtSaldoFinal = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
         jLabel1.setText("FINANCEIRO - HOTEL");
 
-        jTable1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jLabel2.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        jLabel2.setText("Data Inicial: ");
+
+        Tabela.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        Tabela.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Reserva", "Valor", "Tipo", "Data", "Status"
+                "Tipo", "Valor", "Data", "Forma D. Pagamento", "Categoria", "Descrição", "Nome"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(Tabela);
 
-        jLabel2.setText("ID Reserva:");
+        jLabel3.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
+        jLabel3.setText("Tipo:");
 
-        jLabel3.setText("Valor:");
+        CBXTipo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        CBXTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODOS", "ENTRADA", "SAÌDA" }));
 
-        jLabel4.setText("Tipo:");
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel4.setText("Categoria:");
 
-        jLabel5.setText("Data:");
+        CBXCategoria.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        CBXCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODAS", "RESERVA", "SALÁRIO" }));
 
-        CBXTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pagamento", "Recibimento" }));
+        jLabel5.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        jLabel5.setText("Data FInal:");
 
-        BTNRegistrarPagamento.setText("Registrar Pagamento");
-        BTNRegistrarPagamento.addActionListener(new java.awt.event.ActionListener() {
+        BTFiltro.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        BTFiltro.setText("Filtrar");
+        BTFiltro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BTNRegistrarPagamentoActionPerformed(evt);
+                BTFiltroActionPerformed(evt);
             }
         });
 
-        BTNSaldoDoDia.setText("Ver Saldo Do DIa");
-        BTNSaldoDoDia.addActionListener(new java.awt.event.ActionListener() {
+        BTLimpar.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        BTLimpar.setText("Limpar");
+        BTLimpar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BTNSaldoDoDiaActionPerformed(evt);
+                BTLimparActionPerformed(evt);
             }
         });
 
-        BTNEmitirRecibo.setText("Emitir Recibo");
-        BTNEmitirRecibo.addActionListener(new java.awt.event.ActionListener() {
+        jLabel6.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        jLabel6.setText("TOTAL DE ENTRADA:");
+
+        jLabel7.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        jLabel7.setText("SALDO FINAL:");
+
+        jLabel8.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        jLabel8.setText("TOTAL DE SAÍDAS:");
+
+        BTPagarFuncionario.setText("Pagar Funcionario");
+        BTPagarFuncionario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BTNEmitirReciboActionPerformed(evt);
+                BTPagarFuncionarioActionPerformed(evt);
             }
         });
 
-        BTNLimpar.setText("Limpar");
+        BTGerarRelatorio.setText("Gerar Relatório");
 
-        BTNExPDF.setText("Exportar PDF");
-
-        BTNExCVS.setText("Exportar CVS");
-        BTNExCVS.addActionListener(new java.awt.event.ActionListener() {
+        BTFecha.setText("Fechar");
+        BTFecha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BTNExCVSActionPerformed(evt);
+                BTFechaActionPerformed(evt);
             }
         });
 
-        BTNVoltar.setText("Voltar ao Menu");
-        BTNVoltar.addActionListener(new java.awt.event.ActionListener() {
+        BTVoltar.setText("Voltar");
+        BTVoltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BTNVoltarActionPerformed(evt);
+                BTVoltarActionPerformed(evt);
             }
         });
 
-        jLabel6.setText("TABELA DE TRANSAÇÕES");
+        TxtTotalEntrada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TxtTotalEntradaActionPerformed(evt);
+            }
+        });
+
+        TxtTotalDeSaida.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TxtTotalDeSaidaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(374, 374, 374))
+            .addComponent(jSeparator2)
+            .addComponent(jSeparator4)
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 843, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(245, 245, 245)
-                                .addComponent(jLabel6)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(TxtIDReserva)
-                                    .addComponent(TxtValor, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
-                                .addGap(33, 33, 33)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(TxtData, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(BTNSaldoDoDia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel1)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(CBXTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(BTNRegistrarPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(BTNLimpar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(BTNEmitirRecibo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 6, Short.MAX_VALUE)
-                                .addComponent(BTNExPDF, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(92, 92, 92)
-                                .addComponent(BTNExCVS, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(105, 105, 105)
-                                .addComponent(BTNVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jSeparator2))))
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(CBXTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(CBXCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(204, 204, 204)
+                        .addComponent(BTFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(BTLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel2)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(Datainicial, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(132, 132, 132)
+                            .addComponent(jLabel5)
+                            .addGap(18, 18, 18)
+                            .addComponent(DataFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator3)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(TxtTotalEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel8)
+                        .addGap(12, 12, 12)
+                        .addComponent(TxtTotalDeSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(TxtSaldoFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(BTPagarFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(BTGerarRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(BTFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(BTVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15))))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(9, 9, 9)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(TxtIDReserva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(CBXTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BTNRegistrarPagamento)
-                    .addComponent(BTNEmitirRecibo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(TxtValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(TxtData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BTNSaldoDoDia)
-                    .addComponent(BTNLimpar))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(Datainicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(BTFiltro)
+                                .addComponent(BTLimpar))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(CBXTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel4)
+                                .addComponent(CBXCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(DataFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
-                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BTNExPDF)
-                    .addComponent(BTNExCVS)
-                    .addComponent(BTNVoltar))
-                .addContainerGap(19, Short.MAX_VALUE))
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel7)
+                    .addComponent(TxtTotalEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TxtTotalDeSaida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TxtSaldoFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BTGerarRelatorio)
+                    .addComponent(BTFecha)
+                    .addComponent(BTPagarFuncionario)
+                    .addComponent(BTVoltar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void BTNRegistrarPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNRegistrarPagamentoActionPerformed
-        try {
-            //Ler os dados da tela, incluindo a data
-            int idReserva = Integer.parseInt(TxtIDReserva.getText());
-            BigDecimal valor = new BigDecimal(TxtValor.getText());
-            String tipo = (String) CBXTipo.getSelectedItem();
-            String dataTexto = TxtData.getText();
-
-            //Converte o texto da data para o objeto LocalDate que o Controller espera
-            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            java.time.LocalDate data = java.time.LocalDate.parse(dataTexto, formatter);
-
-            //Chamada nova agra com a data
-            boolean sucesso = financeiroController.registrarPagamento(idReserva, valor, tipo, data);
-
-            if (sucesso) {
-                JOptionPane.showMessageDialog(this, "Pagamento registrado com sucesso!");
-            } else {
-                JOptionPane.showMessageDialog(this, "Falha ao registrar o pagamento.");
-            }
-        } catch (java.time.format.DateTimeParseException e) {
-            JOptionPane.showMessageDialog(this, "Formato de data inválido. Use dd/MM/yyyy.");
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Por favor, insira valores numéricos válidos para ID e Valor.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Ocorreu um erro: " + e.getMessage());
-        }
-    }//GEN-LAST:event_BTNRegistrarPagamentoActionPerformed
-
-    private void BTNSaldoDoDiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNSaldoDoDiaActionPerformed
-        try {
-            String dataTexto = TxtData.getText();
-            if (dataTexto.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Por favor, digite uma data no formato dd/MM/yyyy.", "Atenção", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            //Converter a data para o formato que o Controller espera
-            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            java.time.LocalDate data = java.time.LocalDate.parse(dataTexto, formatter);
-
-            BigDecimal saldo = financeiroController.calcularSaldoDiario(data);
-
-            JOptionPane.showMessageDialog(this, "O saldo do dia " + dataTexto + " é: R$ " + saldo, "Saldo do Dia", JOptionPane.INFORMATION_MESSAGE);
-
-        } catch (java.time.format.DateTimeParseException e) {
-            JOptionPane.showMessageDialog(this, "Formato de data inválido. Use dd/MM/yyyy.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Ocorreu um erro ao calcular o saldo: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-
-    }//GEN-LAST:event_BTNSaldoDoDiaActionPerformed
-
-    private void BTNVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNVoltarActionPerformed
+    private void BTVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTVoltarActionPerformed
         this.dispose();
         this.menuPai.setVisible(true);
-    }//GEN-LAST:event_BTNVoltarActionPerformed
+    }//GEN-LAST:event_BTVoltarActionPerformed
 
-    private void BTNEmitirReciboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNEmitirReciboActionPerformed
-
-        String idTransacaoStr = JOptionPane.showInputDialog(this, "Digite o ID da Transação para emitir o recibo:");
-
-        if (idTransacaoStr == null || idTransacaoStr.trim().isEmpty()) {
-            return; // Usuário cancelou ou não digitou nada
-        }
-
-        try {
-            int idTransacao = Integer.parseInt(idTransacaoStr);
-
-            //Chama o controller para gerar o texto do recibo
-            String recibo = financeiroController.gerarReciboTexto(idTransacao);
-
-            javax.swing.JTextArea textArea = new javax.swing.JTextArea(recibo);
-            textArea.setEditable(false);
-            javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane(textArea);
-            scrollPane.setPreferredSize(new java.awt.Dimension(300, 150));
-            JOptionPane.showMessageDialog(this, scrollPane, "Recibo", JOptionPane.INFORMATION_MESSAGE);
-
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Por favor, digite um ID válido (número).", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_BTNEmitirReciboActionPerformed
-
-    private void BTNExCVSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNExCVSActionPerformed
+    private void TxtTotalEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtTotalEntradaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_BTNExCVSActionPerformed
+    }//GEN-LAST:event_TxtTotalEntradaActionPerformed
 
+    private void TxtTotalDeSaidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtTotalDeSaidaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TxtTotalDeSaidaActionPerformed
 
+    private void BTPagarFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTPagarFuncionarioActionPerformed
+        PagarFuncionarioViewGUI pagarfuncionario = new PagarFuncionarioViewGUI();
+        pagarfuncionario.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_BTPagarFuncionarioActionPerformed
+
+    private void BTFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTFechaActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_BTFechaActionPerformed
+
+    private void BTFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTFiltroActionPerformed
+        try {
+        LocalDate dataInicio = Datainicial.getDate() != null 
+                ? Datainicial.getDate().toInstant().atZone(ZoneId.systemDefault(
+                )).toLocalDate() : null;
+        LocalDate dataFim = DataFinal.getDate() != null ? 
+                DataFinal.getDate().toInstant().atZone(ZoneId.systemDefault())
+                        .toLocalDate() : null;
+        String tipo = (String) CBXTipo.getSelectedItem();
+        String categoria = (String) CBXCategoria.getSelectedItem();
+
+        List<Transacao> transacoes = finController.buscarTransacoesFiltradas(
+                dataInicio, dataFim, tipo, categoria);
+
+        DefaultTableModel model = (DefaultTableModel) Tabela.getModel();
+        model.setRowCount(0);
+
+        BigDecimal totalEntrada = BigDecimal.ZERO;
+        BigDecimal totalSaida = BigDecimal.ZERO;
+
+        for (Transacao t : transacoes) {
+            model.addRow(new Object[]{
+                t.getTipo(),
+                t.getValor(),
+                t.getDataTransacao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
+                t.getFormaPagamento(),
+                t.getCategoria(),
+                t.getDescricao(),
+                t.getNomeRelacionado()
+            });
+
+            if ("ENTRADA".equalsIgnoreCase(t.getTipo())) {
+                totalEntrada = totalEntrada.add(t.getValor());
+            } else if ("SAIDA".equalsIgnoreCase(t.getTipo())) {
+                totalSaida = totalSaida.add(t.getValor());
+            }
+        }
+
+        TxtTotalEntrada.setText(totalEntrada.toString());
+        TxtTotalDeSaida.setText(totalSaida.toString());
+        TxtSaldoFinal.setText(totalEntrada.subtract(totalSaida).toString());
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Erro ao aplicar filtro: " + e.getMessage());
+    }
+
+    }//GEN-LAST:event_BTFiltroActionPerformed
+
+    private void BTLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTLimparActionPerformed
+        // Limpa os campos de filtro
+        Datainicial.setDate(null);
+        DataFinal.setDate(null);
+        CBXTipo.setSelectedIndex(0);       // Supondo que "Todos" esteja na posição 0
+        CBXCategoria.setSelectedIndex(0);  // Supondo que "Todas" esteja na posição 0
+
+        // Recarrega todas as transações
+        atualizarTabela();
+    }//GEN-LAST:event_BTLimparActionPerformed
+
+    private void atualizarTabela() {
+    try {
+        List<Transacao> transacoes = finController.buscarTodasTransacoes();
+
+        DefaultTableModel model = (DefaultTableModel) Tabela.getModel();
+        model.setRowCount(0); // limpa a tabela
+
+        BigDecimal totalEntrada = BigDecimal.ZERO;
+        BigDecimal totalSaida = BigDecimal.ZERO;
+
+        for (Transacao t : transacoes) {
+            model.addRow(new Object[]{
+                t.getTipo(),
+                t.getValor(),
+                t.getDataTransacao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
+                t.getFormaPagamento(),
+                t.getCategoria(),
+                t.getDescricao(),
+                t.getNomeRelacionado()
+            });
+
+            if ("ENTRADA".equalsIgnoreCase(t.getTipo())) {
+                totalEntrada = totalEntrada.add(t.getValor());
+            } else if ("SAIDA".equalsIgnoreCase(t.getTipo())) {
+                totalSaida = totalSaida.add(t.getValor());
+            }
+        }
+
+        TxtTotalEntrada.setText(totalEntrada.toString());
+        TxtTotalDeSaida.setText(totalSaida.toString());
+        TxtSaldoFinal.setText(totalEntrada.subtract(totalSaida).toString());
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Erro ao carregar dados: " + e.getMessage());
+    }
+}
+
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> new FinanceiroViewGUI().setVisible(true));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BTNEmitirRecibo;
-    private javax.swing.JButton BTNExCVS;
-    private javax.swing.JButton BTNExPDF;
-    private javax.swing.JButton BTNLimpar;
-    private javax.swing.JButton BTNRegistrarPagamento;
-    private javax.swing.JButton BTNSaldoDoDia;
-    private javax.swing.JButton BTNVoltar;
+    private javax.swing.JButton BTFecha;
+    private javax.swing.JButton BTFiltro;
+    private javax.swing.JButton BTGerarRelatorio;
+    private javax.swing.JButton BTLimpar;
+    private javax.swing.JButton BTPagarFuncionario;
+    private javax.swing.JButton BTVoltar;
+    private javax.swing.JComboBox<String> CBXCategoria;
     private javax.swing.JComboBox<String> CBXTipo;
-    private javax.swing.JTextField TxtData;
-    private javax.swing.JTextField TxtIDReserva;
-    private javax.swing.JTextField TxtValor;
+    private com.toedter.calendar.JDateChooser DataFinal;
+    private com.toedter.calendar.JDateChooser Datainicial;
+    private javax.swing.JTable Tabela;
+    private javax.swing.JTextField TxtSaldoFinal;
+    private javax.swing.JTextField TxtTotalDeSaida;
+    private javax.swing.JTextField TxtTotalEntrada;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
     // End of variables declaration//GEN-END:variables
 }
