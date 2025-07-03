@@ -1,8 +1,10 @@
 package sistemahotel.model;
-
 /**
  *
- * @author rafael
+
+ * @author LabLa
+
+
  */
 public class Pessoa {
     int id;

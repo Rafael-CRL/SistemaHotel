@@ -64,21 +64,28 @@ public class ReservaController {
         }
     }
 
-    public boolean realizarCheckIn(int idReserva) {
-        try {
+    public boolean realizarCheckIn(int idReserva,int numeroPessoas) {
+        try{
             Reserva reserva = reservaDAO.buscarPorId(idReserva);
+            Quarto quarto = quartoDAO.buscarPorId(reserva.getIdQuarto());
             
-            if (reserva != null && "Pendente".equalsIgnoreCase(reserva.getStatus())) {
-                reserva.setStatus("Ativa");
-                reservaDAO.atualizar(reserva); // Chama o método 'atualizar' que já existe no DAO.
-                return true;
-            } else {
-                // Retorna false se a reserva não foi encontrada ou não está no status correto.
-                return false; 
+            // Validações
+            if (!"Pendente".equals(reserva.getStatus())) {
+                throw new IllegalArgumentException("Reserva não está pendente");
             }
-        } catch (SQLException e) {
-            System.err.println("Erro no Controller ao fazer check-in: " + e.getMessage());
-            return false;
+            
+            if (numeroPessoas > quarto.getCapacidade()) {
+            throw new IllegalArgumentException("O quarto suporta no máximo " + quarto.getCapacidade() + " pessoas");
+            }
+            
+            // Atualiza a reserva
+            reserva.setNumeroPessoas(numeroPessoas);
+            reserva.setStatus("Ativa");
+            return reservaDAO.atualizar(reserva);
+            
+        }catch (SQLException e) {
+        e.printStackTrace();
+        return false;
         }
     }
     
