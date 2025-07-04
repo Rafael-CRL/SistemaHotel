@@ -11,11 +11,13 @@ import sistemahotel.model.Funcionario;
  * @author rafael
  */
 public class MenuViewGUI extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuViewGUI.class.getName());
     private Funcionario usuarioLogado;
+
     /**
      * Creates new form MenuViewGUI
+     *
      * @param usuario
      */
     public MenuViewGUI(Funcionario usuario) {
@@ -35,6 +37,7 @@ public class MenuViewGUI extends javax.swing.JFrame {
         btnFinanceiro = new javax.swing.JButton();
         btnSair = new javax.swing.JButton();
         btnGerenciarFuncionarios = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -76,6 +79,13 @@ public class MenuViewGUI extends javax.swing.JFrame {
             }
         });
 
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -88,13 +98,13 @@ public class MenuViewGUI extends javax.swing.JFrame {
                 .addGap(53, 53, 53)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnGerenciarFuncionarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btnReservas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnGestao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(btnReservas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnGestao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnFinanceiro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnSair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnSair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnLogout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(60, 60, 60))
         );
         layout.setVerticalGroup(
@@ -111,7 +121,9 @@ public class MenuViewGUI extends javax.swing.JFrame {
                     .addComponent(btnReservas, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(btnGerenciarFuncionarios, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnGerenciarFuncionarios, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -120,13 +132,13 @@ public class MenuViewGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnReservasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReservasActionPerformed
- 
+
         ReservaViewGUI telaReservas = new ReservaViewGUI(this, this.usuarioLogado);
         telaReservas.setVisible(true);
         this.setVisible(false);
-        
+
     }//GEN-LAST:event_btnReservasActionPerformed
-    
+
     private void btnGestaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestaoActionPerformed
         GestaoView telaGestao = new GestaoView(this, this.usuarioLogado);
         telaGestao.setVisible(true);
@@ -149,7 +161,12 @@ public class MenuViewGUI extends javax.swing.JFrame {
         // Opcional: passar o menu pai se precisar voltar (new FuncionarioViewGUI(this);)
         telaFuncionarios.setVisible(true);
     }//GEN-LAST:event_btnGerenciarFuncionariosActionPerformed
-  
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        this.dispose();
+        new LoginViewGUI().setVisible(true);
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
     private void configurarAcessos() {
         // Lógica de controle de acesso
         if ("Gerente".equalsIgnoreCase(this.usuarioLogado.getCargo())) {
@@ -164,6 +181,7 @@ public class MenuViewGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnFinanceiro;
     private javax.swing.JButton btnGerenciarFuncionarios;
     private javax.swing.JButton btnGestao;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnReservas;
     private javax.swing.JButton btnSair;
     private javax.swing.ButtonGroup buttonGroup1;
