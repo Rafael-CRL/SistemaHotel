@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import javax.swing.JOptionPane;
+import sistemahotel.controller.FinanceiroController;
+import sistemahotel.controller.FuncionarioController;
 import sistemahotel.controller.PagarFuncionarioController;
 import sistemahotel.model.Funcionario;
 import sistemahotel.model.PagamentoFuncionario;
@@ -18,7 +20,8 @@ import sistemahotel.model.PagamentoFuncionario;
  */
 public class PagarFuncionarioViewGUI extends javax.swing.JFrame {
     
-    private final PagarFuncionarioController controller = new PagarFuncionarioController();
+    private final FinanceiroController financeiroController = new FinanceiroController();
+    private final FuncionarioController funcionarioController = new FuncionarioController();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PagarFuncionarioViewGUI.class.getName());
 
     /**
@@ -88,7 +91,6 @@ public class PagarFuncionarioViewGUI extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
         jLabel7.setText("Descrição/Observação:");
 
-        CBNomeFuncionario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione o Funcionario" }));
         CBNomeFuncionario.setToolTipText("");
         CBNomeFuncionario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -258,47 +260,61 @@ public class PagarFuncionarioViewGUI extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
     
     //Exibir os nomes dos funcionarios no JCombox
     private void carregarFuncionarios() {
-        List<String> nomes = controller.listarNomesFuncionarios();
-        for (String nome : nomes) {
-        CBNomeFuncionario.addItem(nome);
-    }
+        CBNomeFuncionario.removeAllItems();
+        //Chama o controller correto para buscar a lista de funcionários.
+        List<Funcionario> funcionarios = funcionarioController.listarFuncionarios();
+        for (Funcionario func : funcionarios) {
+            CBNomeFuncionario.addItem(func);
+        }
 }
     
     private void CBNomeFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CBNomeFuncionarioActionPerformed
-        String nomeSelecionado = (String) CBNomeFuncionario.getSelectedItem();
+     Funcionario selecionado = (Funcionario) CBNomeFuncionario.getSelectedItem();
 
-    if (nomeSelecionado != null && !nomeSelecionado.trim().isEmpty()) {
-        controller.buscarFuncionario(nomeSelecionado).ifPresent(func -> {
-            TxtIDDoFuncionario.setText(String.valueOf(func.getId()));
-            SalarioDoFuncionario.setText(func.getSalario().toPlainString());
-            TXTCargoDoFuncionario.setText(func.getCargo());
-        });
+    // Se um item válido foi selecionado, preenche os campos da tela
+    if (selecionado != null) {
+        TxtIDDoFuncionario.setText(String.valueOf(selecionado.getId()));
+        SalarioDoFuncionario.setText(selecionado.getSalario().toPlainString());
+        TXTCargoDoFuncionario.setText(selecionado.getCargo());
     }
 
     }//GEN-LAST:event_CBNomeFuncionarioActionPerformed
 
     private void BTNConfimarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNConfimarActionPerformed
     try {
-        PagamentoFuncionario pagamento = new PagamentoFuncionario();
-        pagamento.setNome((String) CBNomeFuncionario.getSelectedItem());
-        pagamento.setId(Integer.parseInt(TxtIDDoFuncionario.getText()));
-        pagamento.setCargo(TXTCargoDoFuncionario.getText());
-        pagamento.setSalario(new BigDecimal(SalarioDoFuncionario.getText()));
-        pagamento.setValorPago(new BigDecimal(TXTValorSerPago.getText()));
-        pagamento.setDataPagamento(DataDoPagamento.getDate());
-        pagamento.setFormaDePagamento((String) CBXFormaDePagamento.getSelectedItem());
-        pagamento.setDescricao(TXTADescricao.getText());
+        // Pega os dados diretamente dos componentes da tela
+        Funcionario funcionarioSelecionado = (Funcionario) CBNomeFuncionario.getSelectedItem();
+        BigDecimal valorPago = new BigDecimal(TXTValorSerPago.getText());
+        String descricao = TXTADescricao.getText();
+        String formaPagamento = (String) CBXFormaDePagamento.getSelectedItem();
 
-        controller.registrarPagamento(pagamento);
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Erro ao registrar pagamento: " + e.getMessage());
-        e.printStackTrace();
+        // Validação para garantir que um funcionário foi selecionado
+        if (funcionarioSelecionado == null) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecione um funcionário.", "Erro de Validação", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+
+        // Chama o método do FinanceiroController com os parâmetros corretos
+        boolean sucesso = financeiroController.registrarPagamentoFuncionario(funcionarioSelecionado, valorPago, descricao, formaPagamento);
+
+        if (sucesso) {
+            JOptionPane.showMessageDialog(this, "Pagamento de funcionário registrado com sucesso!");
+            BTLimparActionPerformed(null); // Limpa a tela para o próximo pagamento
+        } else {
+            JOptionPane.showMessageDialog(this, "Falha ao registrar o pagamento.");
+        }
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "O valor a ser pago deve ser um número válido.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Erro ao registrar pagamento: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
     }//GEN-LAST:event_BTNConfimarActionPerformed
 
     private void SalarioDoFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalarioDoFuncionarioActionPerformed
@@ -345,37 +361,13 @@ public class PagarFuncionarioViewGUI extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_BTNCancelarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new PagarFuncionarioViewGUI().setVisible(true));
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BTLimpar;
     private javax.swing.JButton BTNCancelar;
     private javax.swing.JButton BTNConfimar;
     private javax.swing.JButton BTNEditar;
-    private javax.swing.JComboBox<String> CBNomeFuncionario;
+    private javax.swing.JComboBox<Funcionario> CBNomeFuncionario;
     private javax.swing.JComboBox<String> CBXFormaDePagamento;
     private com.toedter.calendar.JDateChooser DataDoPagamento;
     private javax.swing.JTextField SalarioDoFuncionario;
