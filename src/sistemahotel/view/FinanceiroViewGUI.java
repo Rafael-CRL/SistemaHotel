@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package sistemahotel.view;
+
 import java.util.List;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,35 +16,37 @@ import sistemahotel.dao.FuncionarioDAO;
 import sistemahotel.model.Funcionario;
 import sistemahotel.model.Transacao;
 import sistemahotel.view.MenuViewGUI;
+import java.time.format.DateTimeFormatter;
+
 /**
  *
  * @author Ray Carvalho
  */
 public class FinanceiroViewGUI extends javax.swing.JFrame {
-    
-   private MenuViewGUI menuPai;
-   private FinanceiroController finController;
-   private Funcionario usuarioLogado;
-   private MenuViewGUI menuViewGUI;
-    
+
+    private MenuViewGUI menuPai;
+    private FinanceiroController finController;
+    private Funcionario usuarioLogado;
+    private MenuViewGUI menuViewGUI;
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FinanceiroViewGUI.class.getName());
+    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
     /**
      * Creates new form FinanceiroViewGUI
      */
-
     public FinanceiroViewGUI() {
- 
-    }
-    
-    public FinanceiroViewGUI(MenuViewGUI menuPai, Funcionario usuarioLogado) {
-    initComponents();
-    this.setLocationRelativeTo(null);
-    this.menuPai = menuPai;
-    this.usuarioLogado = usuarioLogado;
-    this.finController = new FinanceiroController();
-    atualizarTabela();
-}
 
+    }
+
+    public FinanceiroViewGUI(MenuViewGUI menuPai, Funcionario usuarioLogado) {
+        initComponents();
+        this.setLocationRelativeTo(null);
+        this.menuPai = menuPai;
+        this.usuarioLogado = usuarioLogado;
+        this.finController = new FinanceiroController();
+        atualizarTabela();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -116,13 +119,18 @@ public class FinanceiroViewGUI extends javax.swing.JFrame {
         jLabel3.setText("Tipo:");
 
         CBXTipo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        CBXTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODOS", "ENTRADA", "SAÌDA" }));
+        CBXTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Entrada", "Saídas" }));
+        CBXTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CBXTipoActionPerformed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel4.setText("Categoria:");
 
         CBXCategoria.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        CBXCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODAS", "RESERVA", "SALÁRIO" }));
+        CBXCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todas", "Entrada", "Saída" }));
 
         jLabel5.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
         jLabel5.setText("Data FInal:");
@@ -184,6 +192,12 @@ public class FinanceiroViewGUI extends javax.swing.JFrame {
         TxtTotalDeSaida.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TxtTotalDeSaidaActionPerformed(evt);
+            }
+        });
+
+        TxtSaldoFinal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TxtSaldoFinalActionPerformed(evt);
             }
         });
 
@@ -317,9 +331,9 @@ public class FinanceiroViewGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_TxtTotalDeSaidaActionPerformed
 
     private void BTPagarFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTPagarFuncionarioActionPerformed
-        PagarFuncionarioViewGUI pagarfuncionario = new PagarFuncionarioViewGUI();
-        pagarfuncionario.setVisible(true);
-        this.dispose();
+        PagarFuncionarioViewGUI pagarFuncionario = new PagarFuncionarioViewGUI(this.menuPai, this.usuarioLogado);
+        pagarFuncionario.setVisible(true);
+        this.setVisible(false); 
     }//GEN-LAST:event_BTPagarFuncionarioActionPerformed
 
     private void BTFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTFechaActionPerformed
@@ -328,49 +342,26 @@ public class FinanceiroViewGUI extends javax.swing.JFrame {
 
     private void BTFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTFiltroActionPerformed
         try {
-        LocalDate dataInicio = Datainicial.getDate() != null 
-                ? Datainicial.getDate().toInstant().atZone(ZoneId.systemDefault(
-                )).toLocalDate() : null;
-        LocalDate dataFim = DataFinal.getDate() != null ? 
-                DataFinal.getDate().toInstant().atZone(ZoneId.systemDefault())
-                        .toLocalDate() : null;
-        String tipo = (String) CBXTipo.getSelectedItem();
-        String categoria = (String) CBXCategoria.getSelectedItem();
+            LocalDate inicio = Datainicial.getDate() != null
+                    ? Datainicial.getDate().toInstant()
+                            .atZone(ZoneId.systemDefault()).toLocalDate()
+                    : null;
+            LocalDate fim = DataFinal.getDate() != null
+                    ? DataFinal.getDate().toInstant()
+                            .atZone(ZoneId.systemDefault()).toLocalDate()
+                    : null;
+            String tipo = CBXTipo.getSelectedItem().toString();
+            String cat = CBXCategoria.getSelectedItem().toString();
 
-        List<Transacao> transacoes = finController.buscarTransacoesFiltradas(
-                dataInicio, dataFim, tipo, categoria);
-
-        DefaultTableModel model = (DefaultTableModel) Tabela.getModel();
-        model.setRowCount(0);
-
-        BigDecimal totalEntrada = BigDecimal.ZERO;
-        BigDecimal totalSaida = BigDecimal.ZERO;
-
-        for (Transacao t : transacoes) {
-            model.addRow(new Object[]{
-                t.getTipo(),
-                t.getValor(),
-                t.getDataTransacao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
-                t.getFormaPagamento(),
-                t.getCategoria(),
-                t.getDescricao(),
-                t.getNomeRelacionado()
-            });
-
-            if ("ENTRADA".equalsIgnoreCase(t.getTipo())) {
-                totalEntrada = totalEntrada.add(t.getValor());
-            } else if ("SAIDA".equalsIgnoreCase(t.getTipo())) {
-                totalSaida = totalSaida.add(t.getValor());
-            }
+            List<Transacao> filt
+                    = finController.buscarTransacoesFiltradas(inicio, fim, tipo, cat);
+            carregarTransacoes(filt);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Erro ao aplicar filtro: " + e.getMessage()
+            );
         }
-
-        TxtTotalEntrada.setText(totalEntrada.toString());
-        TxtTotalDeSaida.setText(totalSaida.toString());
-        TxtSaldoFinal.setText(totalEntrada.subtract(totalSaida).toString());
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Erro ao aplicar filtro: " + e.getMessage());
-    }
 
     }//GEN-LAST:event_BTFiltroActionPerformed
 
@@ -385,13 +376,17 @@ public class FinanceiroViewGUI extends javax.swing.JFrame {
         atualizarTabela();
     }//GEN-LAST:event_BTLimparActionPerformed
 
-    private void atualizarTabela() {
-    try {
-        List<Transacao> transacoes = finController.buscarTodasTransacoes();
+    private void CBXTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CBXTipoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CBXTipoActionPerformed
 
-        DefaultTableModel model = (DefaultTableModel) Tabela.getModel();
-        model.setRowCount(0); // limpa a tabela
-
+    private void TxtSaldoFinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtSaldoFinalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TxtSaldoFinalActionPerformed
+    private void carregarTransacoes(List<Transacao> transacoes) {
+        DefaultTableModel model
+                = (DefaultTableModel) Tabela.getModel();
+        model.setRowCount(0);
         BigDecimal totalEntrada = BigDecimal.ZERO;
         BigDecimal totalSaida = BigDecimal.ZERO;
 
@@ -399,54 +394,38 @@ public class FinanceiroViewGUI extends javax.swing.JFrame {
             model.addRow(new Object[]{
                 t.getTipo(),
                 t.getValor(),
-                t.getDataTransacao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
+                t.getDataTransacao().format(DTF),
                 t.getFormaPagamento(),
                 t.getCategoria(),
                 t.getDescricao(),
                 t.getNomeRelacionado()
             });
-
-            if ("ENTRADA".equalsIgnoreCase(t.getTipo())) {
+            if ("Entrada".equalsIgnoreCase(t.getTipo())) {
                 totalEntrada = totalEntrada.add(t.getValor());
-            } else if ("SAIDA".equalsIgnoreCase(t.getTipo())) {
+            } else if ("Saida".equalsIgnoreCase(t.getTipo())) {
                 totalSaida = totalSaida.add(t.getValor());
             }
         }
 
         TxtTotalEntrada.setText(totalEntrada.toString());
         TxtTotalDeSaida.setText(totalSaida.toString());
-        TxtSaldoFinal.setText(totalEntrada.subtract(totalSaida).toString());
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Erro ao carregar dados: " + e.getMessage());
+        TxtSaldoFinal.setText(
+                totalEntrada.subtract(totalSaida).toString()
+        );
     }
-}
 
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    private void atualizarTabela() {
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
+            List<Transacao> todas = finController.buscarTodasTransacoes();
+            carregarTransacoes(todas);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Erro ao carregar dados: " + e.getMessage()
+            );
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FinanceiroViewGUI().setVisible(true));
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BTFecha;

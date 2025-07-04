@@ -4,22 +4,24 @@
  */
 package sistemahotel.view;
 
+import java.math.BigDecimal;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import sistemahotel.controller.CadastroController;
 import sistemahotel.model.Quarto;
+
 /**
  *
  * @author rafael
  */
 public class QuartosFormDialog extends javax.swing.JDialog {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(QuartosFormDialog.class.getName());
     private CadastroController cadastroController;
     private Quarto quarto; // Guarda o quarto que está sendo editado
     private ListaQuartos viewPai;
+
     /**
-     * Creates new form FuncionarioForm
      */
     public QuartosFormDialog(java.awt.Frame parent, boolean modal, CadastroController controller, Quarto qua, ListaQuartos viewPai) {
         super(parent, modal);
@@ -57,9 +59,13 @@ public class QuartosFormDialog extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        txtTipo = new javax.swing.JTextField();
-        txtNumero = new javax.swing.JTextField();
+        txtPrecoDiaria = new javax.swing.JTextField();
         cmbStatus = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        txtNumero1 = new javax.swing.JTextField();
+        jCTipo = new javax.swing.JComboBox<>();
+        jCCapacidade = new javax.swing.JComboBox<>();
         Title = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
@@ -72,7 +78,21 @@ public class QuartosFormDialog extends javax.swing.JDialog {
 
         jLabel10.setText("Status");
 
+        txtPrecoDiaria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPrecoDiariaActionPerformed(evt);
+            }
+        });
+
         cmbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponivel", "Ocupado" }));
+
+        jLabel11.setText("Diaria Preço");
+
+        jLabel12.setText("Capacidade");
+
+        jCTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Solteiro", "Casal", "Duplo", "Suite", "Familia" }));
+
+        jCCapacidade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -81,19 +101,19 @@ public class QuartosFormDialog extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(85, Short.MAX_VALUE))
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel12))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtNumero1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                    .addComponent(cmbStatus, 0, 200, Short.MAX_VALUE)
+                    .addComponent(txtPrecoDiaria, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                    .addComponent(jCTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jCCapacidade, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(43, 43, 43))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel10, jLabel2, jLabel3});
@@ -104,22 +124,30 @@ public class QuartosFormDialog extends javax.swing.JDialog {
                 .addGap(21, 21, 21)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(txtNumero1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
+                    .addComponent(jCTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10))
-                .addContainerGap(22, Short.MAX_VALUE))
+                    .addComponent(jLabel10)
+                    .addComponent(cmbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(jCCapacidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(txtPrecoDiaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel10, jLabel2, jLabel3});
 
         Title.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
-        Title.setText("Dados do Funcionário");
+        Title.setText("Dados do Quarto");
 
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -144,7 +172,7 @@ public class QuartosFormDialog extends javax.swing.JDialog {
                 .addComponent(Title)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(17, Short.MAX_VALUE)
+                .addContainerGap(35, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnSalvar)
@@ -175,12 +203,11 @@ public class QuartosFormDialog extends javax.swing.JDialog {
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         try {
             // Coleta todos os dados dos campos da tela
-            String numero = txtNumero.getText();
-            String tipo = txtTipo.getText();
+            String numero = txtNumero1.getText();
+            String tipo = (String) jCTipo.getSelectedItem();
             String status = (String) cmbStatus.getSelectedItem();
 
-
-            // Se this.funcionario não é nulo, estamos no MODO EDIÇÃO
+            // Se this.quarto não é nulo, estamos no MODO EDIÇÃO
             if (this.quarto != null) {
                 // Atualiza o objeto existente com os novos dados
                 this.quarto.setNumero(numero);
@@ -188,10 +215,14 @@ public class QuartosFormDialog extends javax.swing.JDialog {
                 this.quarto.setTipo(tipo);
 
                 cadastroController.atualizarQuarto(this.quarto);
-                JOptionPane.showMessageDialog(this, "Funcionário atualizado com sucesso!");
+                JOptionPane.showMessageDialog(this, "Quarto atualizado com sucesso!");
 
             } else { // Se não, estamos no MODO ADIÇÃO
-                boolean sucesso = cadastroController.cadastrarQuarto(numero, tipo, status);
+                String capaciade = (String) jCCapacidade.getSelectedItem(); 
+                int capacidade = Integer.parseInt(capaciade);
+                BigDecimal preco = new BigDecimal(txtPrecoDiaria.getText());
+
+                boolean sucesso = cadastroController.cadastrarQuarto(numero, tipo, capacidade, preco);
                 if (sucesso) {
                     JOptionPane.showMessageDialog(this, "Quarto cadastrado com sucesso!");
                 } else {
@@ -211,11 +242,16 @@ public class QuartosFormDialog extends javax.swing.JDialog {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtPrecoDiariaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecoDiariaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrecoDiariaActionPerformed
     private void preencherFormulario() {
-        txtNumero.setText(quarto.getNumero());
-        txtTipo.setText(quarto.getTipo());
+        txtPrecoDiaria.setText(quarto.getNumero());
+        jCTipo.setSelectedItem(quarto.getTipo());
         cmbStatus.setSelectedItem(quarto.getStatus());
     }
+
     /**
      * @param args the command line arguments
      */
@@ -258,11 +294,15 @@ public class QuartosFormDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<String> cmbStatus;
+    private javax.swing.JComboBox<String> jCCapacidade;
+    private javax.swing.JComboBox<String> jCTipo;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField txtNumero;
-    private javax.swing.JTextField txtTipo;
+    private javax.swing.JTextField txtNumero1;
+    private javax.swing.JTextField txtPrecoDiaria;
     // End of variables declaration//GEN-END:variables
 }

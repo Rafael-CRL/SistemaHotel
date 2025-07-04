@@ -117,7 +117,7 @@ public boolean cadastrarQuarto(Quarto quarto) {
         }
     }
     public void excluirQuarto(int id) throws SQLException {
-        String sql = "DELETE FROM Quarto WHERE id = ?";
+        String sql = "DELETE FROM quartos WHERE id = ?";
         
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
@@ -125,4 +125,19 @@ public boolean cadastrarQuarto(Quarto quarto) {
         }
     }
     
+    public boolean temReservas(int idQuarto) throws SQLException {
+    String sql = "SELECT COUNT(*) FROM reservas WHERE id_quarto = ?";
+    
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, idQuarto);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                int total = rs.getInt(1);
+                return total > 0;
+            }
+            return false;
+        }
+    }
+}
+
 }

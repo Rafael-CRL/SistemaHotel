@@ -2,31 +2,52 @@ package sistemahotel.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
-
+/**
+ * Representa uma reserva com seus dados e regras de negócio.
+ */
 public class Reserva {
 
     private int id;
-    private int idQuarto;
-    private int idHospede;
-    private LocalDate dataEntrada; 
-    private LocalDate dataSaida;   
-    private BigDecimal valorTotal; 
+    private Quarto quarto;
+    private List<Hospede> hospedes;
+    private Funcionario funcionarioResponsavel;
+    private LocalDate dataEntrada;
+    private LocalDate dataSaida;
+    private BigDecimal valorTotal;
     private String status;
-    private int numeroPessoas;
-
 
     public Reserva() {
+        this.hospedes = new ArrayList<>();
     }
 
-    public Reserva(int idQuarto, int idHospede, LocalDate dataEntrada, LocalDate dataSaida, String status) {
-        this.idQuarto = idQuarto;
-        this.idHospede = idHospede;
-        this.dataEntrada = dataEntrada;
-        this.dataSaida = dataSaida;
-        this.valorTotal = BigDecimal.ZERO; // Valor total começa como zero
-        this.status = status;
+    /**
+     * Calcula o valor total da estadia com base no número de diárias.
+     */
+    public BigDecimal calcularValorTotal() {
+        if (this.quarto == null || this.quarto.getPrecoDiaria() == null || this.dataEntrada == null || this.dataSaida == null) {
+            throw new IllegalStateException("Dados insuficientes para calcular o valor total da reserva.");
+        }
+
+        long diarias = ChronoUnit.DAYS.between(this.dataEntrada, this.dataSaida);
+        if (diarias == 0) diarias = 1;
+
+        return this.quarto.getPrecoDiaria().multiply(new BigDecimal(diarias));
     }
+
+    /**
+     * Adiciona um hóspede à reserva, respeitando a capacidade do quarto.
+     */
+    public void adicionarHospede(Hospede hospede) {
+        if (this.hospedes.size() >= this.quarto.getCapacidade()) {
+            throw new IllegalStateException("Capacidade máxima do quarto atingida.");
+        }
+        this.hospedes.add(hospede);
+    }
+
 
     public int getId() {
         return id;
@@ -36,20 +57,28 @@ public class Reserva {
         this.id = id;
     }
 
-    public int getIdQuarto() {
-        return idQuarto;
+    public Quarto getQuarto() {
+        return quarto;
     }
 
-    public void setIdQuarto(int idQuarto) {
-        this.idQuarto = idQuarto;
+    public void setQuarto(Quarto quarto) {
+        this.quarto = quarto;
     }
 
-    public int getIdHospede() {
-        return idHospede;
+    public List<Hospede> getHospedes() {
+        return hospedes;
     }
 
-    public void setIdHospede(int idHospede) {
-        this.idHospede = idHospede;
+    public void setHospedes(List<Hospede> hospedes) {
+        this.hospedes = hospedes;
+    }
+
+    public Funcionario getFuncionarioResponsavel() {
+        return funcionarioResponsavel;
+    }
+
+    public void setFuncionarioResponsavel(Funcionario funcionarioResponsavel) {
+        this.funcionarioResponsavel = funcionarioResponsavel;
     }
 
     public LocalDate getDataEntrada() {
@@ -83,18 +112,5 @@ public class Reserva {
     public void setStatus(String status) {
         this.status = status;
     }
-
-    public int getNumeroPessoas() {
-        return numeroPessoas;
-    }
-
-    public void setNumeroPessoas(int numeroPessoas) {
-        if(numeroPessoas < 1 || numeroPessoas > 4){
-            throw new IllegalArgumentException("Número de pessoas em um quarto deve ser entre 1 e 4");
-        }
-        this.numeroPessoas = numeroPessoas;
-    }
-
-
     
 }
