@@ -98,4 +98,13 @@ public class FuncionarioController {
         return null; // Retorna null em caso de erro de banco de dados
     }
 }
+    
+    public Funcionario buscarFuncionarioPorNome(String nome) {
+    try {
+        return funcionarioDAO.buscarPorNome(nome);
+    } catch (SQLException e) {
+        System.err.println("Erro no Controller ao buscar funcionário por nome: " + e.getMessage());
+        return null;
+    }
+}
 }

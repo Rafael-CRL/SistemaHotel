@@ -3,8 +3,11 @@ package sistemahotel.view;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import sistemahotel.controller.CadastroController;
+import sistemahotel.controller.FinanceiroController;
 import sistemahotel.controller.HospedeController;
 import sistemahotel.controller.ReservaController;
 import sistemahotel.dao.HospedeDAO;
@@ -12,14 +15,11 @@ import sistemahotel.dao.QuartoDAO;
 import sistemahotel.model.Funcionario;
 import sistemahotel.model.Hospede;
 import sistemahotel.model.Quarto;
+import sistemahotel.model.Reserva;
 import sistemahotel.view.MenuViewGUI;
 
-/**
- *
- * @author Ray Carvalho
- */
 public class ReservaViewGUI extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ReservaViewGUI.class.getName());
     private ReservaController reservaController;
     private Funcionario usuarioLogado;
@@ -28,57 +28,41 @@ public class ReservaViewGUI extends javax.swing.JFrame {
     public ReservaViewGUI(MenuViewGUI menuPai, Funcionario usuarioLogado) {
         initComponents();
         this.setLocationRelativeTo(menuPai);
-        
+
         this.reservaController = new ReservaController();
         this.usuarioLogado = usuarioLogado;
         this.menuPai = menuPai;
-        
+
         // Chama o método para popular os ComboBoxes assim que a tela abre.
         carregarDadosIniciais();
     }
-    
-    public ReservaViewGUI(){
-        initComponents();
-    }
-    
+
     private void carregarDadosIniciais() {
         try {
-            System.out.println("--- DEBUG: Iniciando carregamento de dados para a tela de Reserva ---");
-
-            // Limpa os comboboxes
             cmbHospedes.removeAllItems();
             cmbQuartos.removeAllItems();
 
-            // Carrega os hóspedes
-            HospedeDAO hospedeDAO = new HospedeDAO();
-            List<Hospede> hospedes = hospedeDAO.listarHospedes();
-            // Teste 1: Quantos hóspedes o DAO realmente encontrou?
-            System.out.println("DEBUG: Hóspedes encontrados no banco: " + hospedes.size());
+            //responsável por listar entidades.
+            CadastroController cadastroController = new CadastroController();
 
+            // Usa o CadastroController para buscar a lista de hóspedes.
+            List<Hospede> hospedes = cadastroController.listarHospedes();
             for (Hospede h : hospedes) {
                 cmbHospedes.addItem(h);
             }
 
-            // Carrega os quartos disponíveis
-            QuartoDAO quartoDAO = new QuartoDAO();
-            List<Quarto> quartos = quartoDAO.listarQuartosDisponiveis();
-            // Teste 2: Quantos quartos disponíveis o DAO encontrou?
-            System.out.println("DEBUG: Quartos disponíveis encontrados: " + quartos.size());
-
+            // Usa o CadastroController para buscar a lista de quartos disponíveis.
+            List<Quarto> quartos = cadastroController.listarQuartosDisponiveis();
             for (Quarto q : quartos) {
                 cmbQuartos.addItem(q);
             }
 
-            System.out.println("DEBUG: Dados adicionados aos ComboBoxes com sucesso.");
-            System.out.println("--------------------------------------------------------------------");
-
         } catch (Exception e) {
-            // Se cair aqui, um erro grave aconteceu durante a busca no banco.
-            System.err.println("--- ERRO CRÍTICO em carregarDadosIniciais ---");
             JOptionPane.showMessageDialog(this, "Erro ao carregar dados iniciais: " + e.getMessage());
-            e.printStackTrace(); // Imprime o erro completo no console de saída
+            e.printStackTrace();
         }
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -307,32 +291,39 @@ public class ReservaViewGUI extends javax.swing.JFrame {
 
     private void BtnCriarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCriarReservaActionPerformed
         try {
-            Hospede hospedeSelecionado = (Hospede) cmbHospedes.getSelectedItem();
+            // Pega os OBJETOS completos selecionados na tela.
             Quarto quartoSelecionado = (Quarto) cmbQuartos.getSelectedItem();
 
-            if (hospedeSelecionado == null || quartoSelecionado == null) {
+            // Para o MVP, continuamos selecionando um hóspede principal.
+            Hospede hospedePrincipal = (Hospede) cmbHospedes.getSelectedItem();
+
+            if (hospedePrincipal == null || quartoSelecionado == null) {
                 JOptionPane.showMessageDialog(this, "Por favor, selecione um hóspede e um quarto válidos.");
                 return;
             }
-            
+
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate dataEntrada = LocalDate.parse(txtDataEntrada.getText(), formatter);
             LocalDate dataSaida = LocalDate.parse(txtDataSaida.getText(), formatter);
 
-            boolean sucesso = reservaController.criarReserva(quartoSelecionado.getId(), hospedeSelecionado.getId(), dataEntrada, dataSaida);
-            
+            // Monta a lista de hóspedes para a reserva.
+            List<Hospede> hospedesDaReserva = new ArrayList<>();
+            hospedesDaReserva.add(hospedePrincipal);
+
+            // Chama o controller refatorado, passando os objetos completos.
+            boolean sucesso = reservaController.criarReserva(quartoSelecionado, hospedesDaReserva, this.usuarioLogado, dataEntrada, dataSaida);
+
             if (sucesso) {
                 JOptionPane.showMessageDialog(this, "Reserva criada com sucesso!");
-                carregarDadosIniciais(); // Atualiza a lista de quartos
+                carregarDadosIniciais(); // Atualiza a lista de quartos disponíveis.
             } else {
-                JOptionPane.showMessageDialog(this, "Falha ao criar reserva. Verifique a disponibilidade ou os logs.");
+                JOptionPane.showMessageDialog(this, "Falha ao criar reserva. Verifique os dados ou a disponibilidade.");
             }
-            
+
         } catch (java.time.format.DateTimeParseException e) {
             JOptionPane.showMessageDialog(this, "Formato de data inválido. Use o formato dd/MM/yyyy.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao criar reserva: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
         }
     }//GEN-LAST:event_BtnCriarReservaActionPerformed
 
@@ -346,17 +337,39 @@ public class ReservaViewGUI extends javax.swing.JFrame {
 
     private void BtnCheckOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCheckOutActionPerformed
         String idReservaStr = JOptionPane.showInputDialog(this, "Digite o ID da Reserva para fazer o Check-out:");
-        String precoDiariaStr = JOptionPane.showInputDialog(this, "Digite o valor da diária (ex: 150.50):");
+
+        if (idReservaStr == null || idReservaStr.trim().isEmpty()) {
+            return;
+        }
 
         try {
             int idReserva = Integer.parseInt(idReservaStr);
-            BigDecimal precoDiaria = new BigDecimal(precoDiariaStr);
-
-            BigDecimal valorTotal = reservaController.realizarCheckOut(idReserva, precoDiaria);
+            BigDecimal valorTotal = reservaController.realizarCheckOut(idReserva);
 
             if (valorTotal != null) {
-                JOptionPane.showMessageDialog(this, "Check-out realizado!\nValor Total a Pagar: R$ " + valorTotal);
-                carregarDadosIniciais(); // Atualiza a lista de quartos
+                // Cria um JComboBox com as opções de pagamento.
+                String[] opcoesPagamento = {"Cartão de Crédito", "Cartão de Débito", "PIX", "Dinheiro"};
+                javax.swing.JComboBox<String> comboBoxPagamento = new javax.swing.JComboBox<>(opcoesPagamento);
+
+                // Exibe um JOptionPane que contém o JComboBox.
+                int result = JOptionPane.showConfirmDialog(this, comboBoxPagamento, "Selecione a Forma de Pagamento", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+                if (result == JOptionPane.OK_OPTION) {
+                    String formaPagamento = (String) comboBoxPagamento.getSelectedItem();
+
+                    JOptionPane.showMessageDialog(this, "Check-out realizado!\nValor Total a Pagar: R$ " + valorTotal);
+
+                    // Integração Financeira
+                    Reserva reservaFinalizada = reservaController.buscarReservaPorId(idReserva);
+                    if (reservaFinalizada != null) {
+                        FinanceiroController finController = new FinanceiroController();
+                        // Chama o método atualizado, passando a forma de pagamento escolhida.
+                        finController.registrarPagamentoReserva(reservaFinalizada, this.usuarioLogado, formaPagamento);
+                    }
+
+                    carregarDadosIniciais();
+                }
+                
             } else {
                 JOptionPane.showMessageDialog(this, "Não foi possível fazer o check-out. Verifique se a reserva está ativa.", "Falha", JOptionPane.ERROR_MESSAGE);
             }
@@ -366,45 +379,24 @@ public class ReservaViewGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnCheckOutActionPerformed
 
     private void BtnCheckINActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCheckINActionPerformed
-        String idReservaStr = JOptionPane.showInputDialog(this, 
-        "Digite o ID da Reserva para fazer o Check-in:", 
-        "Realizar Check-in", 
-        JOptionPane.PLAIN_MESSAGE);
+        String idReservaStr = JOptionPane.showInputDialog(this, "Digite o ID da Reserva para fazer o Check-in:", "Realizar Check-in", JOptionPane.PLAIN_MESSAGE);
 
         if (idReservaStr == null || idReservaStr.trim().isEmpty()) {
             return;
         }
 
         try {
-            // 1. Abrir diálogo para seleção do número de pessoas
-            NumeroPessoasDialog dialog = new NumeroPessoasDialog(this);
-            dialog.setVisible(true);
-            int numeroPessoas = dialog.getNumeroSelecionado();
-
-            // 2. Converter ID para inteiro
             int idReserva = Integer.parseInt(idReservaStr);
-
-            // 3. Chamar o método CORRETO com 2 parâmetros
-            boolean sucesso = reservaController.realizarCheckIn(idReserva, numeroPessoas);
+            boolean sucesso = reservaController.realizarCheckIn(idReserva);
 
             if (sucesso) {
-                JOptionPane.showMessageDialog(this, 
-                    """
-                    Check-in realizado com sucesso!
-                    ID Reserva: """ + idReserva + "\n" +
-                    "Número de pessoas: " + numeroPessoas, 
-                    "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Check-in realizado com sucesso para a reserva ID: " + idReserva, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(this, """
-                                                    Não foi possivel fazer o check-in.
-                                                    Verifique se a reserva existe e está com status 'Pendente'.""", 
-                    "Falha no Check-in", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Não foi possível fazer o check-in.\nVerifique se a reserva existe e está com o status 'Pendente'.", "Falha no Check-in", JOptionPane.WARNING_MESSAGE);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, 
-                "Erro ao fazer check-in: " + e.getMessage(), 
-                "Erro", JOptionPane.ERROR_MESSAGE);
-        }                                          
+            JOptionPane.showMessageDialog(this, "Erro ao fazer check-in: " + e.getMessage());
+        }
     }//GEN-LAST:event_BtnCheckINActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -418,38 +410,38 @@ public class ReservaViewGUI extends javax.swing.JFrame {
     private void BtnBuscarCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarCPFActionPerformed
         // 1. Obter o CPF digitado (removendo formatação se necessário):
         String cpfDigitado = TxtCPF.getText().replaceAll("[^0-9]", "");
-        
+
         // 2. Validar o CPF:
-        if(cpfDigitado.length() != 11){
+        if (cpfDigitado.length() != 11) {
             JOptionPane.showMessageDialog(this,
                     "CPF inválido! Deve conter 11 dígitos.",
-                    "Erro", JOptionPane.ERROR_MESSAGE );
+                    "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         // 3. Buscar o hóspede usando o Controller:
         HospedeController controller = new HospedeController();
         Hospede hospedeEncontrado = controller.buscarPorCPF(cpfDigitado);
-        
+
         // 4. Tratar o resultado da busca:
-        if (hospedeEncontrado != null){
+        if (hospedeEncontrado != null) {
             // Procura o hóspede no JComboBox existente:
-            for(int i = 0; i < cmbHospedes.getItemCount(); i++){
+            for (int i = 0; i < cmbHospedes.getItemCount(); i++) {
                 Hospede h = cmbHospedes.getItemAt(i);
-                if(h.getCpf().equals(cpfDigitado)){
+                if (h.getCpf().equals(cpfDigitado)) {
                     cmbHospedes.setSelectedIndex(i);
-                    JOptionPane.showMessageDialog(this, 
+                    JOptionPane.showMessageDialog(this,
                             "Hóspede encontrado: " + h.getNome(),
                             "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
             }
             // Caso o hóspede não esteja no ComboBox (mas foi encontrado no banco):
-            JOptionPane.showMessageDialog(this, 
+            JOptionPane.showMessageDialog(this,
                     "Hóspede encontrado, mas não está na lista atual",
                     "Aviso", JOptionPane.WARNING_MESSAGE);
-        } else{
-            JOptionPane.showMessageDialog(this, 
+        } else {
+            JOptionPane.showMessageDialog(this,
                     "Nenhum hóspede encontrado com o CPF: " + cpfDigitado,
                     "Não encontrado", JOptionPane.WARNING_MESSAGE);
         }
@@ -458,28 +450,6 @@ public class ReservaViewGUI extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new ReservaViewGUI().setVisible(true));
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnBuscarCPF;
     private javax.swing.JButton BtnCheckIN;
