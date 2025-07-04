@@ -151,21 +151,29 @@ public class ListaQuartos extends javax.swing.JFrame {
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Por favor, selecione um quarto para excluir.");
             return;
-        }
+}
+
+        int idQuarto = (int) tblQuartos.getValueAt(selectedRow, 0);
+
+// Verifica se o quarto tem reservas associadas
+        if (cadastroController.quartoTemReservas(idQuarto)) {
+            JOptionPane.showMessageDialog(this, "Não é possível excluir o quarto. Existem reservas associadas a ele.");
+            return;
+}
 
         int confirm = JOptionPane.showConfirmDialog(this, "Tem certeza?", "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
 
         if (confirm == JOptionPane.YES_OPTION) {
-            int idQuarto = (int) tblQuartos.getValueAt(selectedRow, 0);
             boolean sucesso = cadastroController.excluirQuarto(idQuarto);
 
             if (sucesso) {
-                JOptionPane.showMessageDialog(this, "Funcionário excluído com sucesso!");
-                atualizarTabela(); // Atualiza a tabela para remover a linha
+                JOptionPane.showMessageDialog(this, "Quarto excluído com sucesso!");
+                atualizarTabela();
             } else {
-                JOptionPane.showMessageDialog(this, "Falha ao excluir o funcionário.");
-            }
-        }
+                JOptionPane.showMessageDialog(this, "Falha ao excluir o quarto.");
+    }
+    }
+
     }//GEN-LAST:event_btnExluirActionPerformed
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
@@ -176,7 +184,7 @@ public class ListaQuartos extends javax.swing.JFrame {
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         int selectedRow = tblQuartos.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Por favor, selecione um funcionário na tabela para editar.");
+            JOptionPane.showMessageDialog(this, "Por favor, selecione um quarto na tabela para editar.");
             return;
         }
 
@@ -206,7 +214,7 @@ public class ListaQuartos extends javax.swing.JFrame {
     tableModel.setRowCount(0);
 
     // Busca a lista de funcionários do banco de dados através do controller.
-   List<Quarto> quartos = cadastroController.listarQuartos();
+   List<Quarto> quartos = cadastroController.listarTodosQuartos();
 
     // Percorre a lista de funcionários e adiciona cada um como uma nova linha na tabela.
      for (Quarto q : quartos) {

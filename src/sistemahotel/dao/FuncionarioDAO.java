@@ -20,19 +20,20 @@ import sistemahotel.model.Funcionario;
  * @author rafael
  */
 public class FuncionarioDAO {
+
     private Connection conn;
-    
-    public FuncionarioDAO(){
+
+    public FuncionarioDAO() {
         this.conn = ConnectionFactory.getConexao();
     }
-    
+
     public Funcionario buscarPorCPF(String cpf) throws SQLException {
         // Agora busca na tabela 'funcionarios' e carrega todos os campos.
         String sql = "SELECT * FROM funcionarios WHERE cpf = ?";
-        
+
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, cpf);
-            
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Funcionario func = new Funcionario();
@@ -56,12 +57,12 @@ public class FuncionarioDAO {
                 }
             }
         }
-        return null;    
+        return null;
     }
 
     public void cadastrarFuncionario(Funcionario func) throws SQLException {
-        String sql = "INSERT INTO funcionarios (nome, cpf, cargo, data_admissao, salario, login, senha, status, email, telefone) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO funcionarios (nome, cpf, cargo, data_admissao, salario, login, senha, status, email, telefone) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, func.getNome());
@@ -77,11 +78,11 @@ public class FuncionarioDAO {
             stmt.executeUpdate();
         }
     }
-    
+
     public void atualizarFuncionario(Funcionario func) throws SQLException {
-        String sql = "UPDATE funcionarios SET nome = ?, cargo = ?, data_admissao = ?, salario = ?, " +
-                     "login = ?, status = ?, email = ?, telefone = ? WHERE id = ?";
-        
+        String sql = "UPDATE funcionarios SET nome = ?, cargo = ?, data_admissao = ?, salario = ?, "
+                + "login = ?, status = ?, email = ?, telefone = ? WHERE id = ?";
+
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, func.getNome());
             stmt.setString(2, func.getCargo());
@@ -95,10 +96,10 @@ public class FuncionarioDAO {
             stmt.executeUpdate();
         }
     }
-    
+
     public void excluirFuncionario(int id) throws SQLException {
         String sql = "DELETE FROM funcionarios WHERE id = ?";
-        
+
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
@@ -108,11 +109,10 @@ public class FuncionarioDAO {
     public List<Funcionario> listarTodos() throws SQLException {
         List<Funcionario> funcionarios = new ArrayList<>();
         String sql = "SELECT * FROM funcionarios";
-        
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            
-            while(rs.next()) {
+
+        try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
                 Funcionario func = new Funcionario();
                 func.setId(rs.getInt("id"));
                 func.setNome(rs.getString("nome"));
@@ -135,7 +135,7 @@ public class FuncionarioDAO {
         }
         return funcionarios;
     }
-    
+
     public Funcionario buscarPorId(int id) throws SQLException {
         String sql = "SELECT * FROM funcionarios WHERE id = ?";
 
@@ -165,5 +165,45 @@ public class FuncionarioDAO {
             }
         }
         return null; // Retorna null se não encontrar o funcionário
+    }
+
+    /**
+     * Método auxiliar para mapear uma linha do ResultSet para um objeto
+     * Funcionario. Centraliza a lógica de criação de objetos para evitar
+     * repetição de código.
+     */
+    private Funcionario mapRowToFuncionario(ResultSet rs) throws SQLException {
+        Funcionario func = new Funcionario();
+
+        // Herdados da classe Pessoa
+        func.setId(rs.getInt("id"));
+        func.setNome(rs.getString("nome"));
+        func.setCpf(rs.getString("cpf"));
+        func.setEmail(rs.getString("email"));
+        func.setTelefone(rs.getString("telefone"));
+
+        // Específicos do Funcionário
+        func.setCargo(rs.getString("cargo"));
+        func.setLogin(rs.getString("login"));
+        func.setStatus(rs.getString("status"));
+        func.setSalario(rs.getBigDecimal("salario"));
+        if (rs.getDate("data_admissao") != null) {
+            func.setDataAdmissao(rs.getDate("data_admissao").toLocalDate());
+        }
+        return func;
+    }
+
+    public Funcionario buscarPorNome(String nome) throws SQLException {
+        String sql = "SELECT * FROM funcionarios WHERE nome = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, nome);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    // Reutiliza a lógica de mapeamento que já existe
+                    return mapRowToFuncionario(rs); // Supondo que você tenha um método auxiliar
+                }
+            }
+        }
+        return null;
     }
 }

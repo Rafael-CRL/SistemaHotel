@@ -1,108 +1,28 @@
-/*
- * Classe de modelo que representa uma transação financeira no sistema.
- */
+// Em sistemahotel.model.Transacao.java
 package sistemahotel.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- *
- * @author Ray Carvalho
- */
-
-public class Transacao extends PagamentoFuncionario{
-
+public class Transacao {
     private int id;
-    private int idReserva;
-    private BigDecimal valor;
     private String tipo;
-    private LocalDateTime dataTransacao;
-    private String status;
-    private String formaPagamento;
-    private String descricao;
-    private String nomeRelacionado;
     private String categoria;
-    private Integer idHospede;
-    private Integer idFuncionario;
+    private BigDecimal valor;
+    private String descricao;
+    private LocalDateTime dataTransacao;
+    private String formaPagamento;
+    
+    // Composição: A transação agora tem os objetos, não os IDs.
+    private Reserva reserva;
+    private Funcionario funcionario; 
 
-    public Integer getIdFuncionario() {
-        return idFuncionario;
-    }
-
-    public void setIdFuncionario(Integer idFuncionario) {
-        this.idFuncionario = idFuncionario;
-    }
-
-    public Integer getIdHospede() {
-        return idHospede;
-    }
-
-    public void setIdHospede(Integer idHospede) {
-        this.idHospede = idHospede;
-    }
-
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
-    public String getFormaPagamento() {
-        return formaPagamento;
-    }
-
-    public void setFormaPagamento(String formaPagamento) {
-        this.formaPagamento = formaPagamento;
-    }
-
-    @Override
-    public String getDescricao() {
-        return descricao;
-    }
-
-    @Override
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public String getNomeRelacionado() {
-        return nomeRelacionado;
-    }
-
-    public void setNomeRelacionado(String nomeRelacionado) {
-        this.nomeRelacionado = nomeRelacionado;
-    }
-
-    public Transacao() {
-    }
-
-    @Override
     public int getId() {
         return id;
     }
 
-    @Override
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getIdReserva() {
-        return idReserva;
-    }
-
-    public void setIdReserva(int idReserva) {
-        this.idReserva = idReserva;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
     }
 
     public String getTipo() {
@@ -113,6 +33,30 @@ public class Transacao extends PagamentoFuncionario{
         this.tipo = tipo;
     }
 
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
     public LocalDateTime getDataTransacao() {
         return dataTransacao;
     }
@@ -121,13 +65,42 @@ public class Transacao extends PagamentoFuncionario{
         this.dataTransacao = dataTransacao;
     }
 
-    @Override
-    public String getStatus() {
-        return status;
+    public String getFormaPagamento() {
+        return formaPagamento;
     }
 
-    @Override
-    public void setStatus(String status) {
-        this.status = status;
+    public void setFormaPagamento(String formaPagamento) {
+        this.formaPagamento = formaPagamento;
     }
+
+    public Reserva getReserva() {
+        return reserva;
+    }
+
+    public void setReserva(Reserva reserva) {
+        this.reserva = reserva;
+    }
+
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
+
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
+    }
+    
+public String getNomeRelacionado() {
+    if (funcionario != null && funcionario.getNome() != null) {
+        return funcionario.getNome();
+    }
+    if (reserva != null 
+        && reserva.getHospedes() != null 
+        && !reserva.getHospedes().isEmpty()
+        && reserva.getHospedes().get(0).getNome() != null) {
+        return reserva.getHospedes().get(0).getNome();
+    }
+    return "-";
+}
+    
+    
 }

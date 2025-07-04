@@ -1,14 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sistemahotel.model;
 
 import java.math.BigDecimal;
 
 /**
- *
- * @author klayt
+ * Representa um quarto no hotel, encapsulando seus dados e comportamentos.
  */
 public class Quarto {
     private int id;
@@ -28,13 +23,30 @@ public class Quarto {
         this.capacidade = capacidade;
         this.precoDiaria = precoDiaria;
     }
-    
-    public Quarto(int id, String numero, String tipo, String status){
-        this.id = id;
-        this.numero = numero;
-        this.tipo = tipo;
-        this.status = status;
+
+
+    public void ocupar() {
+        if (!"Disponível".equalsIgnoreCase(this.status)) {
+            throw new IllegalStateException("Não é possível ocupar um quarto que não está disponível. Status atual: " + this.status);
+        }
+        this.status = "Ocupado";
     }
+
+    /**
+     * Altera o status do quarto para "Disponível" após uma reserva ser finalizada.
+     */
+    public void liberar() {
+        this.status = "Disponível";
+    }
+    
+    /**
+     * Altera o status do quarto para "Manutenção", impedindo novas reservas.
+     */
+    public void bloquearParaManutencao() {
+        this.status = "Manutenção";
+    }
+
+   
 
     public int getId() {
         return id;
@@ -63,7 +75,9 @@ public class Quarto {
     public String getStatus() {
         return status;
     }
-
+    
+    // O status é controlado principalmente pelos métodos de comportamento.
+    // Este setter pode ser mantido para uso interno do DAO, se necessário.
     public void setStatus(String status) {
         this.status = status;
     }
@@ -84,15 +98,14 @@ public class Quarto {
     }
     
     public void setPrecoDiaria(BigDecimal precoDiaria){
-        if (precoDiaria.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Preço deve ser positivo");
+        if (precoDiaria == null || precoDiaria.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Preço da diária deve ser um valor positivo.");
         }
         this.precoDiaria = precoDiaria;
     }
     
     @Override
     public String toString() {
-        // O JComboBox vai mostrar o número, tipo e status
-        return "Quarto " + numero + " (" + tipo + ") - Capacidade: " + capacidade + " - R$" + precoDiaria + "/noite";
+        return "Quarto " + numero + " (" + tipo + ")";
     }
 }

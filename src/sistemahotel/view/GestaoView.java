@@ -4,6 +4,7 @@
  */
 package sistemahotel.view;
 
+import java.math.BigDecimal;
 import javax.swing.JOptionPane;
 import sistemahotel.controller.CadastroController;
 import sistemahotel.model.Funcionario;
@@ -40,6 +41,7 @@ public class GestaoView extends javax.swing.JFrame {
     private void initComponents() {
 
         jComboBox2 = new javax.swing.JComboBox<>();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtCpf = new javax.swing.JTextField();
@@ -54,11 +56,11 @@ public class GestaoView extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         txtNumero = new javax.swing.JTextField();
         jBCadastroQuarto = new javax.swing.JButton();
-        txtTipo = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        txtStatus = new javax.swing.JTextField();
+        jCTipo = new javax.swing.JComboBox<>();
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,7 +81,7 @@ public class GestaoView extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("Listar quartos disponiveis:");
+        jLabel3.setText("Listar quartos:");
 
         jButton2.setText("Listar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -116,13 +118,7 @@ public class GestaoView extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setText("Status:");
-
-        txtStatus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtStatusActionPerformed(evt);
-            }
-        });
+        jCTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Solteiro", "Casal", "Duplo", "Suite", "Familia" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,19 +143,15 @@ public class GestaoView extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(jBCadastroQuarto)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(jLabel9)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(txtNumero))
                                             .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(txtTipo, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
-                                                    .addComponent(txtStatus)))))
+                                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jCTipo, 0, 98, Short.MAX_VALUE))))
                                     .addComponent(jLabel8)))
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
@@ -170,7 +162,7 @@ public class GestaoView extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(6, 6, Short.MAX_VALUE)
+                        .addGap(21, 31, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel3)
                             .addComponent(jButton2))))
@@ -201,15 +193,12 @@ public class GestaoView extends javax.swing.JFrame {
                             .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4)
                             .addComponent(jLabel10)
-                            .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jCTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(JBCadastroHospede)
-                    .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addGap(5, 5, 5)
-                .addComponent(jBCadastroQuarto)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
+                    .addComponent(jBCadastroQuarto))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
                 .addComponent(jButton3)
                 .addGap(27, 27, 27))
         );
@@ -240,22 +229,48 @@ public class GestaoView extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void JBCadastroHospedeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCadastroHospedeActionPerformed
-     CadastroController controller = new CadastroController();
-        controller.cadastrarHospede(txtNome.getText(), txtCpf.getText());
-        JOptionPane.showMessageDialog(null, "Hóspede cadastrado com sucesso!");
-           
+     try {
+        String nome = txtNome.getText();
+        String cpf = txtCpf.getText();
+        
+        // CORREÇÃO: Passando strings vazias para os novos parâmetros obrigatórios (email e telefone).
+        boolean sucesso = cadastroController.cadastrarHospede(nome, cpf);
+        
+        if (sucesso) {
+            JOptionPane.showMessageDialog(this, "Hóspede cadastrado com sucesso!");
+            // Limpa os campos após o sucesso
+            txtNome.setText("");
+            txtCpf.setText("");
+        } else {
+            JOptionPane.showMessageDialog(this, "Falha ao cadastrar hóspede. Verifique se os dados estão corretos ou se o CPF já existe.");
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage(), "Erro de Cadastro", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_JBCadastroHospedeActionPerformed
 
     private void jBCadastroQuartoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCadastroQuartoActionPerformed
-        CadastroController controller = new CadastroController();
-        controller.cadastrarQuarto(txtNumero.getText(), txtTipo.getText(), txtStatus.getText());
-        JOptionPane.showMessageDialog(null, "Quarto cadastrado com sucesso!");
+        try {
+        String numero = txtNumero.getText();
+        String tipo = (String) jCTipo.getSelectedItem();
+        
+        // CORREÇÃO: Passando valores padrão para os novos parâmetros obrigatórios.
+        int capacidadePadrao = 2; // Exemplo: todo quarto cadastrado por aqui terá capacidade 2.
+        BigDecimal precoDiariaPadrao = new BigDecimal("150.00"); // Exemplo: R$150.00
 
+        boolean sucesso = cadastroController.cadastrarQuarto(numero, tipo, capacidadePadrao, precoDiariaPadrao);
+        
+        if (sucesso) {
+            JOptionPane.showMessageDialog(this, "Quarto cadastrado com sucesso!");
+            txtNumero.setText("");
+            jCTipo.setSelectedItem(0);
+        } else {
+            JOptionPane.showMessageDialog(this, "Falha ao cadastrar quarto.");
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage(), "Erro de Cadastro", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_jBCadastroQuartoActionPerformed
-
-    private void txtStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStatusActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtStatusActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -263,19 +278,18 @@ public class GestaoView extends javax.swing.JFrame {
     private javax.swing.JButton jBCadastroQuarto;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JComboBox<String> jCTipo;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JTextField txtCpf;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtNumero;
-    private javax.swing.JTextField txtStatus;
-    private javax.swing.JTextField txtTipo;
     // End of variables declaration//GEN-END:variables
 }

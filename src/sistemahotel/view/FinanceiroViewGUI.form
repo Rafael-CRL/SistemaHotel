@@ -259,12 +259,15 @@
         </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="3">
-            <StringItem index="0" value="TODOS"/>
-            <StringItem index="1" value="ENTRADA"/>
-            <StringItem index="2" value="SA&#xcc;DA"/>
+            <StringItem index="0" value="Todos"/>
+            <StringItem index="1" value="Entrada"/>
+            <StringItem index="2" value="Sa&#xed;das"/>
           </StringArray>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CBXTipoActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
@@ -284,9 +287,9 @@
         </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="3">
-            <StringItem index="0" value="TODAS"/>
-            <StringItem index="1" value="RESERVA"/>
-            <StringItem index="2" value="SAL&#xc1;RIO"/>
+            <StringItem index="0" value="Todas"/>
+            <StringItem index="1" value="Entrada"/>
+            <StringItem index="2" value="Sa&#xed;da"/>
           </StringArray>
         </Property>
       </Properties>
@@ -396,6 +399,9 @@
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="TxtSaldoFinal">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TxtSaldoFinalActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
