@@ -101,6 +101,12 @@ public class FuncionarioFormDialog extends javax.swing.JDialog {
 
         jLabel10.setText("Status");
 
+        txtDataAdmissao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDataAdmissaoActionPerformed(evt);
+            }
+        });
+
         cmbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ativo", "inativo" }));
 
         jLabel11.setText("Data Admissão");
@@ -334,6 +340,10 @@ public class FuncionarioFormDialog extends javax.swing.JDialog {
     private void cmbCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCargoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbCargoActionPerformed
+
+    private void txtDataAdmissaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDataAdmissaoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDataAdmissaoActionPerformed
     private void preencherFormulario() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
