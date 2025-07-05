@@ -84,7 +84,7 @@ public class QuartosFormDialog extends javax.swing.JDialog {
             }
         });
 
-        cmbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponivel", "Ocupado" }));
+        cmbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponivel", "Indisponivel", "Ocupado" }));
 
         jLabel11.setText("Diaria Preço");
 
