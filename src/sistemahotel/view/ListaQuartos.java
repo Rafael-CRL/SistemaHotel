@@ -75,7 +75,7 @@ public class ListaQuartos extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblQuartos);
 
-        btnAdicionar.setText("Adicionar");
+        btnAdicionar.setText("Adicionar quarto");
         btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAdicionarActionPerformed(evt);
