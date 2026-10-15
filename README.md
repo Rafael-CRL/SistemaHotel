@@ -1,6 +1,6 @@
 # SistemaHotel
 
-Sistema de gestão de hotel em Java, desenvolvido em equipe na faculdade.
+Sistema de gestão de hotel em Java, desenvolvido para disciplina de Programação II.
 
 - Login por CPF
 - Reservas: criação, check-in e check-out
